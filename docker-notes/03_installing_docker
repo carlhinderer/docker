@@ -47,3 +47,20 @@ CHAPTER 3 - INSTALLING DOCKER
 
         # 'ubuntu' is the image name, 'latest' is the image tag
         $ sudo docker run --rm -ti ubuntu:latest /bin/bash
+
+
+
+- Exploring the Docker Server
+
+    - Although the Docker server is often installed, enabled, and run automatically, we can also 
+        start it manually:
+
+        # Starts the Docker daemon 
+        # Creates and listens to a Unix socket (-H unix:///var/run/docker.sock)
+        # Binds to all system IP addresses using the default port (-H tcp://0.0.0.0:2375)
+
+        $ sudo dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375
+
+
+    - The Docker daemon configuration is stored in '/etc/docker/daemon.json'.  It uses sane 
+        defaults for all of its settings, so this file is often small or completely absent.
