@@ -1,0 +1,107 @@
+-----------------------------------------------------------
+CHAPTER 1 - DOCKER
+-----------------------------------------------------------
+
+- Docker
+
+    - Introduced by Solomon Hykes (founder and CEO of dotCloud) in 2013.
+
+
+    - Designed to easily encapsulate the process of creating a distributable artifact for
+        any application, deploying it at scale into any environment, and streamlining the
+        workflow and responsiveness of agile software organizations.
+
+
+    - Docker's architectural philosophy centers on atomic or throwaway containers.  During
+        deployment, the whole running environment of the old application is thrown away 
+        with it.  Nothing  in the environment of the application lives longer than the
+        application itself.  Applications cannot accidentally rely on artifacts left by
+        a previous release.  This means applications are highly portable between servers,
+        because all state has to be included into the deployment artifact or sent to an
+        external dependency like a database or file server.
+
+
+
+- Benefits of the Docker Workflow
+
+    1. Packaging software in a way that leverages skills developers already have
+
+    2. Bundling application software and the required OS filesystems together in a single 
+         standardized image format
+
+    3. Using packaged artifacts to test and deliver the exact same artifact to all systems in 
+         all environments
+
+    4. Abstracting software applications from the hardware without sacrificing resources
+
+
+
+- What Docker Isn't
+
+    1. Enterprise Virtualization Platform (like VMware, KVM, etc.)
+
+         A container is not a traditional VM.  VMs contain a complete OS running on top of a
+           hypervisor, which allows you to run radically different OS's on a single host.
+           Containers are Linux processes, and the container and host share the same kernel.
+
+
+    2. Cloud Platform (like OpenStack, CloudStack, etc.)
+
+         Docker only handles deploying, running, and managing containers on pre-existing 
+           Docker hosts.  It doesn't allow you to create new hosts or other resources often
+           managed with a cloud platform.
+
+
+    3. Configuration Management (like Puppet, Chef, etc.)
+
+         Although Docker can improve an organization's abilities to manage applications and
+           their dependencies, it does not directly replace configuration management.  
+           Dockerfiles are used to define how a container should look at build time, but they
+           do not manage the container's ongoing state.
+
+
+    4. Deployment Framework (like Capistrano, Fabric, etc.)
+
+         Docker eases many aspects of deployment by creating container images that encapsulate
+           all the dependencies of an application that can be deployed in all environments 
+           without changes.  However, Docker can't be used to automate a complex deployment
+           process by itself.  Other tools are usually still needed to stitch together the
+           larger workflow.
+
+
+    5. Workload Management Tool (like Mesos, Kubernetes, Swarm, etc.)
+
+         An orchestration layer must be used to coordinate work intelligently across a pool of
+           Docker hosts, track the current state of all the hosts and their resources, and keep
+           an inventory of running containers.
+
+
+    6. Deployment Environment (like Vagrant, etc.)
+
+         Vagrant is often used to simulate server stacks that closely resemble the production 
+           environment in which an application is destined to be deployed.  Among other things,
+           Vagrant makes it easy to run Linux software on macOS and Windows-based workstations.
+           Fully utilizing Docker will make these kinds of things less likely.
+
+
+
+- Basic Terminology
+
+    - Docker Client    = This is the 'docker' command used to control most of the Docker workflow
+                           and talk to remote Docker servers.
+
+    - Docker Server    = This is the 'dockerd' command that is used to start the Docker server
+                           process that builds and launches containers via a client.
+
+    - Docker Images    = Docker images consist of one or more filesystem layers and some important
+                           metadata that represent all the files required to run a Dockerized
+                           application.  A single Docker image can be copied to numerous hosts.  An
+                           image typically has both a name and a tag.  The tag is usually used to
+                           identify a particular release of an image.
+
+    - Docker Container = A Docker container is a Linux container that has been instantiated from a
+                           Docker image.  A specific container can exist only once, however you can
+                           easily create multiple containers from the same image.
+
+    - Atomic Host      = An atomic host is a small, finely tuned OS image, like 'Fedora CoreOS',
+                           that supports container hosting and atomic OS upgrades.
