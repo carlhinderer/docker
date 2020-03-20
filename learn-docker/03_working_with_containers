@@ -154,3 +154,102 @@ $ docker container run centos ping -c 5 127.0.0.1
 
     # Filter the output to get the data you need
     $ docker container inspect -f "{{json .State}}" quotes | jq 
+
+
+
+- Exec Into a Running Container
+
+    - Sometimes, we want to run another process inside an already-running container.  For
+        instance, maybe we want to debug a misbehaving container.
+
+        # Get a shell inside the container
+        # Again, we can use the container name or id
+        $ docker container exec -i -t quotes /bin/sh
+
+        -i is for interactive mode
+        -t is for getting a terminal emulator
+
+
+        # Get list of processes on a container
+        $ docker container exec quotes ps
+
+
+    - We can run processes as daemon using the -d flag, and we can define environment variables
+        using the -e flag.
+
+        # Define an environment variable
+        $ docker container exec -it -e MY_VAR="Hello World" quotes /bin/sh
+
+
+
+- Attaching to a Running Container
+
+    - We can use the 'attach' command to attach our terminal's standard input, output, and error
+        to a running container using the ID or name of the container.
+
+        $ docker container attach quotes
+
+
+    - To quit the container without stopping or killing it, we press Cntl+P, Cntl+Q to detach.
+
+
+    - In this example, we run the alpine version of the nginx web server.
+
+        $ docker run -d --name nginx -p 8080:80 nginx:alpine
+
+        -p 8080:80 opens port 8080 on the host for access to the nginx web server running inside
+           the container
+
+
+        # Now, we check to see whether we can access Nginx
+        $ curl -4 localhost:8080
+
+
+        # Now, let's attach our terminal to the nginx container to observe what's happening
+        $ docker container attach nginx
+
+        # Open new terminal to send requests
+        $ for n in {1..10}; do curl -4 localhost:8080; done
+
+        # Clean up container afterwards
+        $ docker container rm nginx
+
+
+
+- Retrieving Container Logs
+
+    - When running inside a container, an application should preferably output to STDOUT and 
+        STDERR and not into a file.  This way, Docker can collect this information and keep it
+        ready for consumption by a user or any other external system.
+
+
+    -  To access the logs of a given container, we can use the 'docker container logs' command.  
+        
+        # Retrieve the whole log produced by the application
+        $ docker container logs quotes
+
+        # Retrieve the last 5 log entries
+        $ docker container logs --tail 5 quotes
+
+        # Follow the log as its produced
+        $ docker container logs --tail 5 --follow quotes
+
+
+
+- Logging Drivers
+
+- Using a Container-Specific Loggging Driver
+
+- Changing the Default Logging Driver
+
+- Anatomy of Containers
+
+    - Architecture
+
+    - Namespaces
+
+    - Control Groups (cgroups)
+
+    - Union Filesystem (UnionFS)
+
+    - Container Plumbing
