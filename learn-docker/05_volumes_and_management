@@ -1,0 +1,34 @@
+-----------------------------------------------------------
+CHAPTER 5 - DATA VOLUMES & SYSTEM MANAGEMENT
+-----------------------------------------------------------
+
+
+- Creating and Mounting Data Volumes
+
+- Modifying the Container Layer
+
+- Creating Volumes
+
+- Mounting a Volume
+
+- Removing Volumes
+
+- Sharing Data Between Containers
+
+- Using Host Volumes
+
+- Defining Volumes in Images
+
+- Obtaining Docker System Information
+
+- Listing Resource Consumption
+
+- Pruning Unused Resources
+
+    - Pruning Containers
+    - Pruning Images
+    - Pruning Volumes
+    - Pruning Networks
+    - Pruning Everything
+
+- Consuming Docker System Events
