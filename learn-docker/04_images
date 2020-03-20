@@ -1,0 +1,50 @@
+-----------------------------------------------------------
+CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
+-----------------------------------------------------------
+
+
+- What Are Images?
+
+- The Layered Filesystem
+
+- The Writable Container Layer
+
+- Copy-on-Write
+
+- Graph Drivers
+
+- Creating Images
+
+- Interactive Image Creation
+
+- Using Dockerfiles
+
+- The FROM Keyword
+
+- The RUN Keyword
+
+- The COPY and ADD Keywords
+
+- The WORKDIR Keyword
+
+- The CMD and ENTRYPOINT Keywords
+
+- A Complex Dockerfile
+
+- Building an Image
+
+- Multistep Builds
+
+- Dockerfile Best Practices
+
+- Saving and Loading Images
+
+- Sharing or Shipping Images
+
+- Tagging an Image
+
+- Image Namespaces
+
+- Official Images
+
+- Pushing Images to a Registry
