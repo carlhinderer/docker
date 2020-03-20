@@ -101,4 +101,30 @@ CHAPTER 1 - CONTAINERS
         - Tracing
         - Log aggregation
 
-      Istio (part of the CNCF) is the most popular project of this type. 
+      Istio (part of the CNCF) is the most popular project of this type.
+
+
+
+- Container Architecture
+
+    
+    -----------------------------------------------------
+    |                REST Interface
+    |
+    |                  DOCKER ENGINE
+    |
+    |   libcontainerd    libnetwork    graph    plugins
+    ------------------------------------------------------
+
+    ----------------------
+    |   containerd
+    |      runc
+    ----------------------
+
+    --------------------------------------------------------------------------
+    |   Namespaces    Control Groups     Layer Capabilities    Other OS
+    |   (pid,net,ipc    (cgroups)        (Union filesystem)    Functionality
+    |    mnt,ufs)
+    |
+    |             LINUX OPERATING SYSTEM
+    --------------------------------------------------------------------------
