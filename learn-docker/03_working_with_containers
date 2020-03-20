@@ -96,3 +96,61 @@ $ docker container run centos ping -c 5 127.0.0.1
 
      # Restart container
      $ docker container start quotes
+
+
+
+- Removing Containers
+
+    When we run 'docker container ls -a', we see that there are quite a few containers in the
+      'Exited' status.  
+
+      # Remove a container
+      $ docker container rm <container-id>
+      $ docker container rm <container-name>
+
+      # Force remov
+      $ docker container rm -f <container-id>
+
+    
+
+- Inspecting Containers
+
+    - Containers are runtime instances of an image and have a lot of associated data that
+        characterizes their behavior.  To get more information about a specific container,
+        we use the 'inspect' command.
+
+      $ docker container inspect quotes
+
+          [
+              {
+                  "Id": "c5c1c68c87...",
+                  "Created": "2017-12-30T11:55:51.223271182Z",
+                  "Path": "/bin/sh",
+                  "Args": [
+                      "-c",
+                      "while :; do wget -qO- https://talaikis.com/api/quotes/random; printf '\n'; sleep 5; done"
+                  ],
+                  "State": {
+                      "Status": "running",
+                      "Running": true,
+                      ...
+                  },
+                  "Image": "sha256:e21c333399e0...",
+                  ...
+                  "Mounts": [],
+                  "Config": {
+                      "Hostname": "c5c1c68c87dd",
+                      "Domainname": "",
+                      ...
+                  },
+                  "NetworkSettings": {
+                      "Bridge": "",
+                      "SandboxID": "2fd6c43b6fe5...",
+                      ...
+                  }
+              }
+          ]
+
+
+    # Filter the output to get the data you need
+    $ docker container inspect -f "{{json .State}}" quotes | jq 
