@@ -1,0 +1,98 @@
+-----------------------------------------------------------
+CHAPTER 3 - WORKING WITH CONTAINERS
+-----------------------------------------------------------
+
+
+# Docker
+
+# Start Docker
+$ sudo systemctl start docker
+
+# Make sure Docker is running
+$ docker -v
+
+
+# Had to change permissions to get it working
+$ sudo chmod 666 /var/run/docker.sock
+
+
+# Run first container
+$ docker container run alpine echo "Hello World"
+
+    docker                # Docker CLI
+    container             # Context
+    run                   # Command
+    alpine                # Container Image
+    echo "Hello World"    # Process to run
+
+
+# Another simple container
+# Pings loopback address 5 times
+$ docker container run centos ping -c 5 127.0.0.1
+
+
+
+- Next, we create a container that runs a random quotes generator.  This script does that:
+
+    while :
+    do
+        wget -q0- https://talaikis.com/api/quotes/random
+        printf 'n'
+        sleep 5
+    done
+
+
+    # Run in alpine container as a daemon in the background:
+
+    $ docker container run -d --name quotes alpine \
+        /bin/sh -c "while :; do wget -qO- https://talaikis.com/api/quotes/random; printf '\n'; sleep 5; done"
+
+        # -d runs the container as a Linux daemon
+        # --name is used to give the container an explicit name (one will be auto-generated otherwise)
+
+
+    # Check to make sure the container is up and running
+    $ docker container ls -l
+
+
+
+- Listing Containers
+
+    # List running containers
+    $ docker container ls
+
+    # List all containers defined on system
+    $ docker container ls -a
+
+    # Just get Ids of containers
+    $ docker container ls -q
+
+
+    # Get help for the list command
+    $ docker container ls -h
+
+
+    # Delete all containers defined on system
+    $ docker container rm -f $(docker container ls -a -q)
+
+
+
+- Stopping and Starting Containers
+
+    # Stop container by name
+    $ docker container stop quotes
+
+
+    # Stop container by id
+    $ export CONTAINER_ID = $(docker container ls | grep quotes | awk '{print $1}')
+    $ docker container stop $CONTAINER_ID
+
+
+    - When we stop a container, a SIGTERM is sent to the container.  If it hasn't been
+        terminated in 10 seconds, a SIGKILL is sent.
+
+
+    - Once we've stopped a container, its status changes to 'Exited'.  It can be restarted:
+
+     # Restart container
+     $ docker container start quotes
