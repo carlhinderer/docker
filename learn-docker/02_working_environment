@@ -2,4 +2,48 @@
 CHAPTER 2 - SETTING UP A WORKING ENVIRONMENT
 -----------------------------------------------------------
 
-- 
+- Installing Docker CE on Ubuntu
+
+    # Remove any previous versions
+    $ sudo apt-get remove docker docker-engine docker.io
+
+    # Install prereqs
+    $ sudo apt-get update
+    $ sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+    # Add the Docker repository
+    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add 
+    $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+        $(lsb_release -cs) stable"
+
+    # Install Docker CE
+    $ sudo apt-get update
+    $ sudo apt-get install docker-ce
+
+
+
+- Running Docker Server
+
+    - The Docker server is a separate binary from the client and is used to manage most of the work
+        that Docker is typically used for.  Since we installed CE, the server has already been set
+        up for us.
+
+
+    - To ensure that the Docker server starts every time we boot the system:
+
+        $ sudo systemctl enable docker
+
+      Ubuntu uses 'systemd' to manage processes on the system.  This command tells
+        systemd to enable the docker service and start it when the system boots or
+        switches into the default run level.
+
+
+    - To start the docker server manually:
+
+        $ sudo systemctl start docker
+
+
+    - Test that docker is working correctly:
+
+        # 'ubuntu' is the image name, 'latest' is the image tag
+        $ sudo docker run --rm -ti ubuntu:latest /bin/bash
