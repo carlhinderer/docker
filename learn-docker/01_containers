@@ -1,0 +1,104 @@
+-----------------------------------------------------------
+CHAPTER 1 - CONTAINERS
+-----------------------------------------------------------
+
+- Containers
+
+    - Software containers serve a role similar to shipping containers.  They standardize
+        building of applications and reduce the friction of deployment.
+
+
+    - In the old days, developers wrote applications, then passed them on to operations 
+        engineers who deployed them.  This became unruly as enterprises grew and frameworks 
+        proliferated, but you wanted to colocate applications on the same server.
+
+      For instance, you might have 2 different applictions that require 2 different versions
+        of the same framework on the same server.
+
+
+    - We needed a way to isolate applications running on the same server.  So, we tried VMs.
+        It works, but it is a very heavyweight approach (an entire OS for each application).
+
+      So, we use Docker containers, in which we can package applications, frameworks, and 
+        libraries, along with any configuration we need.  They reduce the cost of 
+        maintenance and the time between releases.
+
+
+    - Reasons Containers are Important:
+
+        1. Containers enhance security of applications.  Applications are cordoned off from
+             each other through the use of Linux security primitives.  Images are immutable 
+             and can thus be scanned for known vulnerabilities.  Trust stores can be used
+             for images.
+
+        2. Containers make it easy to simulate a production environment anywhere.  
+
+        3. Operators can focus on what they're good at - provisioning infrastructure and 
+             running and monitoring applications in production.  They don't need knowledge
+             about the internals of applications.
+
+
+
+- Docker and Moby
+
+    - When Docker originally introduced Docker containers, everything was open source, and 
+        Docker didn't have any commercial products.  The Docker engine was a monolithic
+        piece of software that contained many parts.
+
+
+    - When Docker wanted to separate the open source and commercial parts of its business, the
+        Moby project was created to be the umbrella for the open source components Docker
+        develops.  The components for image management, secret management, config management,
+        networking, and provisioning are examples of Moby projects.
+
+      Other components have been dontaed to the CNCF (Cloud Native Computing Foundation).  
+
+
+
+- Docker CE and EE
+
+    - Docker CE is closed source but completely free.  Docker EE is closed source, and needs to 
+        be licensed on a yearly basis.
+
+
+    - Docker EE consists of 2 projects:
+
+        1. UCP (Universal Control Plane)
+        2. DTR (Docker Trusted Registry)
+
+      Docker EE builds on top of the upstream components of the Moby Project and adds 
+        enterprise-grade features such as:
+
+        - RBAC
+        - Multi tenancy
+        - Mixed clusters of SWARM and Kubernetes
+        - Web-based UI
+        - Content Trust
+        - Image scanning
+
+
+
+- The Container Ecosystem
+
+    - Initially, Docker didn't have a solution for container orchestration, so other companies
+        and orgs tried to fill the gap.  The most prominent orchestrators are:
+
+        1. Kubernetes (Google, donated to CNCF)
+        2. Apache Mesos
+        3. Rancher (integrates Kubernetes, Mesos, and Swarm)
+        4. Red Hat's Open Shift
+        5. Docker's Swarm
+
+
+    - More recently, 'service mesh' is the new buzz word.  As we containerize more applications, 
+        and as we also create more microservice-sized applications, we run into problems
+        that simple orchestration cannot solve in a reliable and scalable way.
+
+      Topics in this area include:
+
+        - Service discovery
+        - Monitoring
+        - Tracing
+        - Log aggregation
+
+      Istio (part of the CNCF) is the most popular project of this type. 
