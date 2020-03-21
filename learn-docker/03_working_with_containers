@@ -2,114 +2,132 @@
 CHAPTER 3 - WORKING WITH CONTAINERS
 -----------------------------------------------------------
 
+- Running Containers
 
-# Docker
+    - To make sure Docker is running:
 
-# Start Docker
-$ sudo systemctl start docker
+        # Start Docker
+        $ sudo systemctl start docker
+    
+        # Make sure Docker is running
+        $ docker -v
+    
+    
+    - Note that I had to change permissions to get this working originally, but switching to
+        lightdm from gdm solved the issue, so it's no longer necessary.
 
-# Make sure Docker is running
-$ docker -v
+        # Had to change permissions to get it working initially
+        $ sudo chmod 666 /var/run/docker.sock
+    
+    
+    - To run our first container:
 
-
-# Had to change permissions to get it working
-$ sudo chmod 666 /var/run/docker.sock
-
-
-# Run first container
-$ docker container run alpine echo "Hello World"
-
-    docker                # Docker CLI
-    container             # Context
-    run                   # Command
-    alpine                # Container Image
-    echo "Hello World"    # Process to run
-
-
-# Another simple container
-# Pings loopback address 5 times
-$ docker container run centos ping -c 5 127.0.0.1
-
-
-
-- Next, we create a container that runs a random quotes generator.  This script does that:
-
-    while :
-    do
-        wget -q0- https://talaikis.com/api/quotes/random
-        printf 'n'
-        sleep 5
-    done
+        # Run first container
+        $ docker container run alpine echo "Hello World"
+    
+        docker                # Docker CLI
+        container             # Context
+        run                   # Command
+        alpine                # Container Image
+        echo "Hello World"    # Process to run
 
 
-    # Run in alpine container as a daemon in the background:
+    - Another simple container:
 
-    $ docker container run -d --name quotes alpine \
-        /bin/sh -c "while :; do wget -qO- https://talaikis.com/api/quotes/random; printf '\n'; sleep 5; done"
-
-        # -d runs the container as a Linux daemon
-        # --name is used to give the container an explicit name (one will be auto-generated otherwise)
+        # Pings loopback address 5 times
+        $ docker container run centos ping -c 5 127.0.0.1
 
 
-    # Check to make sure the container is up and running
-    $ docker container ls -l
+
+- Creating and Running Containers
+
+    - Next, we create a container that runs a random quotes generator.  If we run this script,
+        we see that 'Random Quote' gets printed in the terminal every 5 seconds.
+    
+        while [ true ]
+        do
+            echo 'Random Quote'
+            sleep 5
+        done
+    
+    
+    - Now, we want to  run the same container as a Linux daemon in the background.
+
+        The --name option specifies a name for the container (must be unique system-wide,
+          and will be auto-generated if not specified).
+
+        The -d option funs the container as a Linux daemon.
+
+
+        # Run in alpine container as a daemon in the background
+        $ docker container run -d --name quotes alpine 
+            /bin/sh -c "while [ true ] ; do wget www.google.com/ ; sleep 5 ; done"
+    
+        # Check to make sure the container is up and running
+        $ docker container ls -l
 
 
 
 - Listing Containers
 
-    # List running containers
-    $ docker container ls
+    - To list the containers present on the host:
 
-    # List all containers defined on system
-    $ docker container ls -a
+        # List running containers
+        $ docker container ls
 
-    # Just get Ids of containers
-    $ docker container ls -q
+        # List all containers defined on system
+        $ docker container ls -a
 
-
-    # Get help for the list command
-    $ docker container ls -h
+        # Just get Ids of containers
+        $ docker container ls -q
 
 
-    # Delete all containers defined on system
-    $ docker container rm -f $(docker container ls -a -q)
+        # Get help for the list command
+        $ docker container ls -h
 
 
 
 - Stopping and Starting Containers
 
-    # Stop container by name
-    $ docker container stop quotes
+    - Sometimes, we want to temporarily stop a running container.  We can do this with the
+        'stop' command.
+
+      It will usually take about 10 seconds for the stop command to be executed.  This is 
+        because Docker sends a Linux SIGTERM signal to the main process running inside the
+        container.  If the process doesn't react to the signal and terminate itself within
+        10 seconds, the container is killed with a SIGKILL.
 
 
-    # Stop container by id
-    $ export CONTAINER_ID = $(docker container ls | grep quotes | awk '{print $1}')
-    $ docker container stop $CONTAINER_ID
+        # Stop container by name
+        $ docker container stop quotes
 
-
-    - When we stop a container, a SIGTERM is sent to the container.  If it hasn't been
-        terminated in 10 seconds, a SIGKILL is sent.
+        # Stop container by id
+        $ export CONTAINER_ID = $(docker container ls | grep quotes | awk '{print $1}')
+        $ docker container stop $CONTAINER_ID
 
 
     - Once we've stopped a container, its status changes to 'Exited'.  It can be restarted:
 
-     # Restart container
-     $ docker container start quotes
+        # Restart container
+        $ docker container start quotes
 
 
 
 - Removing Containers
 
-    When we run 'docker container ls -a', we see that there are quite a few containers in the
-      'Exited' status.  
+    - When we run 'docker container ls -a', we see that there are quite a few containers in the
+        'Exited' status.  
 
       # Remove a container
       $ docker container rm <container-id>
       $ docker container rm <container-name>
 
-      # Force remov
+      # Force remove
       $ docker container rm -f <container-id>
+
+
+      # Delete all containers defined on system
+      $ docker container rm -f $(docker container ls -a -q)
 
     
 
