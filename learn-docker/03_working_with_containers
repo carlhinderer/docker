@@ -46,7 +46,7 @@ CHAPTER 3 - WORKING WITH CONTAINERS
     
         while [ true ]
         do
-            echo 'Random Quote'
+            wget -qO- http://quotes.stormconsultancy.co.uk/random.json
             sleep 5
         done
     
@@ -61,7 +61,9 @@ CHAPTER 3 - WORKING WITH CONTAINERS
 
         # Run in alpine container as a daemon in the background
         $ docker container run -d --name quotes alpine 
-            /bin/sh -c "while [ true ] ; do wget www.google.com/ ; sleep 5 ; done"
+            /bin/sh -c \
+            "while [ true ] ; do wget -qO- http://quotes.stormconsultancy.co.uk/random.json ; \
+             printf '\n' ; sleep 5 ; done"
     
         # Check to make sure the container is up and running
         $ docker container ls -l
@@ -88,6 +90,13 @@ CHAPTER 3 - WORKING WITH CONTAINERS
 
 
 - Stopping and Starting Containers
+
+    - A docker container has 3 posible states:
+
+        1. Created
+        2. Running
+        3. Exited
+
 
     - Sometimes, we want to temporarily stop a running container.  We can do this with the
         'stop' command.
@@ -146,7 +155,8 @@ CHAPTER 3 - WORKING WITH CONTAINERS
                   "Path": "/bin/sh",
                   "Args": [
                       "-c",
-                      "while :; do wget -qO- https://talaikis.com/api/quotes/random; printf '\n'; sleep 5; done"
+                      "while :; do wget -qO- https://talaikis.com/api/quotes/random; 
+                        printf '\n'; sleep 5; done"
                   ],
                   "State": {
                       "Status": "running",
@@ -256,9 +266,81 @@ CHAPTER 3 - WORKING WITH CONTAINERS
 
 - Logging Drivers
 
+    - Docker has multiple logging mechanisms to help us get information from running 
+        containers.  These are called 'logging drivers'.  
+
+      Which logging driver is used can be configured at the Docker daemon level.  The
+        default driver is 'json-file'.  Note that the 'docker container logs' command
+        only works with json-file and journald.
+
+
+    - Here are the natively supported logging drivers:
+
+        Driver        Description
+        --------------------------------------------------------------------------------
+        none          No log output for the specific container is produced.
+
+        json-file     This is the default driver. The logging information is stored in 
+                        files, formatted as JSON.
+
+        journald      If the journals daemon is running on the host machine, we can use 
+                        this driver. It forwards logging to the journald daemon.
+
+        syslog        If the syslog daemon is running on the host machine, we can configure 
+                        this driver, which will forward the log messages to the syslog 
+                        daemon.
+
+        gelf          When using this driver, log messages are written to a Graylog Extended
+                        Log Format (GELF) endpoint. Popular examples of such endpoints are 
+                        Graylog and Logstash.
+
+        fluentd       Assuming that the fluentd daemon is installed on the host system, this 
+                        driver writes log messages to it.
+
+
+
 - Using a Container-Specific Loggging Driver
 
+    - We have seen that the logging driver can be set globally in the Docker daemon config
+        file.  We can also define the logging driver on a container-by-container basis.  
+
+
+    - For instance, here we will use the 'none' logging driver:
+
+        # Set the logging driver
+        $ docker container run --name test -it --log-driver none \
+            busybox sh -c 'for N in 1 2 3; do echo "Hello $N"; done'
+
+        Hello 1
+        Hello 2
+        Hello 3
+
+
+        # If we try to get the logs, we get an error
+        $ docker container logs test
+        Error response from daemon: configured logging driver does not support reading
+
+
+
 - Changing the Default Logging Driver
+
+    - To change the default driver, we edit the '/etc/docker/daemon.json' file.
+
+        # Update the config file
+        # /etc/docker/daemon.json
+        {
+          "Log-driver": "json-log",
+          "log-opts": {
+            "max-size": "10m",
+            "max-file": 3
+          }
+        }
+
+
+        # Send the SIGHUP signal to the Docker deamon so it picks up the config file changes
+        $ sudo kill -SIGHUP $(pidof dockerd)  
+
+
 
 - Anatomy of Containers
 
