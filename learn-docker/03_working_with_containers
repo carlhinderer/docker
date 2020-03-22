@@ -344,12 +344,95 @@ CHAPTER 3 - WORKING WITH CONTAINERS
 
 - Anatomy of Containers
 
+    - Containers are specially encapsulated and secured processes running on the host system.
+        They leverage Linux primitives such as namespaces and cgroups.
+
+
     - Architecture
+
+                        REST Interface
+                        Docker Engine
+        libcontainerd   libnetwork   graph   plugins
+        -------------------------------------------------------------
+        containerd + runc
+        -------------------------------------------------------------
+        cgroups  Namespaces  LayerCapabilities  OtherOsFunctionality
+                 (pid,net,    (Union
+                  ipc,mnt,     filesystem)
+                  ufs)
+                         Linux
+
 
     - Namespaces
 
+        - A 'namespace' is an abstraction of global resources such as filesystems, network
+            access, process tree, or the system group ids.
+
+          A Linux system is initialized with a single instance of each namespace type.  After
+            initialization, additional namespaces can be created or joined.
+
+
+        - Linux namespaces originated in the 2.4.19 kernel (2002).  In kernel version 3.8 (2013),
+            user namespaces were added, paving the way for containers.
+
+            - Using filesystem namespaces gives a running process the illusion that it has its
+                own sepearate filessystem.
+
+            - Using the user id namespace means we can define a user 'jdoe' many times on the 
+                same system, as long as they are in separate namespaces.
+
+            - The pid namespace keeps processes in one container from seeing or interacting with
+                processes in other containers.
+
+
+        - The process tree on a Docker host looks like:
+
+                            1    /sbin/init
+                            |
+                           121   /usr/bin/dockerd
+                            |
+                           154   docker-containerd
+                          /   \
+                        194   234     docker-containerd-shim
+                         |     |
+                 CONTAINER-1  CONTAINER-2
+                      |              |
+                     334            267
+                /usr/bin/java     redis-server
+
+
     - Control Groups (cgroups)
+
+        - Linux cgroups are used to limit, manage, and isolate resource usage of collections
+            of processes running on a host.  Resources include CPU time, system memory, 
+            network bandwidth, etc.
+
+        - Engineers at Google originally implemented this feature starting in 2006.  It was 
+            merged into the Linux kernel in version 2.6.24 (2008).
+
 
     - Union Filesystem (UnionFS)
 
+        - The UnionFs forms the backbone of what is now known as container images.  It allows
+            files and directories of distinct filesystems to be overlaid to form a single
+            coherent file system.  
+
+          In this context, the individual filesystems are called 'branches'.  Contents of
+            directories that have the same path within the merged branches will be seen together
+            in a single merged directory.
+
+
     - Container Plumbing
+
+        - runc is a lightweight, portable container runtime.  It provides full support for
+            Linux namespaces, native Linux security features, and cgroups.
+
+          It is a tool for spawning and running containers according to the OCI (Open Container
+            Initiative), governed by the OCP (Open Container Project).
+
+
+        - Whereas runc is a low-level implementation of a container runtime, containerd builds
+            on top of it.  It adds higher-level features, such as image transfer and storage,
+            container execution and supervision, and network and storage attachment.
+
+          With this, it manages the complete lifecycle of containers.
