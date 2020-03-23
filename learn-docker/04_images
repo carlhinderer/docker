@@ -111,7 +111,77 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 - Creating Images
 
+    - There are 3 ways to create a new container image on your system:
+
+        1. Interactively build a container that contains all the additions and changes
+             one desires and then commit those changes onto a new image.
+
+        2. Use a Dockerfile to describe what's in the new image and then build this image
+             using the Dockerfile as a manifest (this way is the most important).
+
+        3. Import it into the system from a tarball.
+
+
+
 - Interactive Image Creation
+
+    - To create an image interactively, we start with a base image we want to use as a
+        template and run it as a container interactively.
+
+        # Run an alpine container interactively
+        $ docker container run -it --name sample alpine bin/sh
+
+
+        # Install ping command on image
+        $ apk update && apk add iputils
+
+        # Now we can use ping
+        $ ping 127.0.0.1
+
+
+    - Now, we can quit the container ('exit') and list all the containers on the system:
+
+        # Container has exited
+        $ docker container ls -a | grep sample
+
+        eff7c92a1b98    alpine    "/bin/sh"    2 minutes ago      Exited (0) ...
+
+
+    - To see what has changed in our container in relation to the base image, we can use the
+        'container diff' command.
+
+        # See changes from base image
+        $ docker container diff sample
+
+        # A for added, C for changed
+        C /bin
+        C /bin/ping
+        C /bin/ping6
+        A /bin/traceroute6
+
+
+    - We can now use the 'container commit' command to persist the changes and create a
+        new image from them.
+
+        # Create new image 'my-alpine'
+        $ docker container commit sample my-alpine
+
+
+        # See new image on the system 
+        #   (note that 'latest' is default tag)
+        $ docker image ls
+
+        REPOSITORY TAG      IMAGE ID        CREATED               SIZE
+        my-alpine  latest   44bca4141130    About a minute ago    5.64MB
+        ...
+
+
+    - To get the list of layers our image consists of:
+
+        # Print list of layers
+        $ docker image history my-alpine
+
+
 
 - Using Dockerfiles
 
