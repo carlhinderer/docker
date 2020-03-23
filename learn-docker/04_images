@@ -2,16 +2,112 @@
 CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 -----------------------------------------------------------
 
-
 - What Are Images?
+
+    - In Linux, everything is a file.  The whole OS is basically a filesystem with files and
+        folders stored on the local disk.  
+
+      An 'image' is basically a big tarball containing a layered filesystem.
+
+
 
 - The Layered Filesystem
 
+    - Container images are templates from which containers are created.  They are not just one
+        monolithic block, but are rather composed of many layers.
+
+                     Layer n
+                     Layer n-1
+                     ...
+                     Layer 2
+                     Layer 1 (Base Layer)
+
+
+    - Each individual layer contains files and folders.  Each layer contains only the
+        filesystem with respect to the underlying layers.  Docker then uses a union 
+        filesystem to create a virtual filesystem out of the set of layers.
+
+      A storage driver handles the details regarding the way these layers interact with
+        each other.  Different storage drivers are available that have advantages and
+        disadvantages in different situations.
+
+
+    - The layers of a container image are all immutable.  Once they are generated, they
+        cannot be changed.  The only possible operation affecting a layer is the 
+        physical deletion of it.
+
+      Since the layers are immuatable, they can be cached without ever becoming stale, 
+        which leads to big performance advantages.
+
+
+    - Here is an example image:
+
+        3. Add static files (ie HTML, CSS, JS files)
+        2. Add Nginx
+        1. Alpine Linux
+
+      Each layer contains only the delta of changes in regard to the previous set of
+        layers.  The content of each layer is mapped to a special folder on the host
+        system (usually a subdirectory of /var/lib/docker).
+
+
+    - The base image is typically one of the official images found on Docker Hub, like
+        Alpine, Ubuntu, or CentOS.  It is also possible to create an image from scratch.
+
+      Docker Hub is a public registry for container images.  It is a central hub ideally
+        suited for sharing public container images.
+
+
+
 - The Writable Container Layer
+
+    - When the Docker engine creates a container from an image, it adds a writable container
+        layer on top of the stack of immuatable layers.
+
+        Container Layer    r/w
+        3. Add static files
+        2. Add Nginx
+        1. Alpine Linux
+
+
+    - Another advantage of the layered approach is that image layers can be shared among many
+        containers created from an image.  All that is needed is a thin, writable container
+        layer for each container.
+
+        Container1          Container2         Container3
+        Thin r/w layer      Thin r/w layer     Thin r/w layer
+                   \              |                /
+                    \             |               /
+                     \            |              /
+                         3. Add static files
+                         2. Add Nginx
+                         1. Alpine Linux
+
+
 
 - Copy-on-Write
 
+    - Docker uses a copy-on-write technique when dealing with images.  If a layer needs a 
+        file or folder on a lower layer, it just uses it.  If a layer needs to write to 
+        a file in a lower layer, it first copies the file to the target layer, then
+        modifies it.
+
+
+
 - Graph Drivers
+
+    - Graph drivers (aka storage drivers) are what enable the union filesystem.  A graph
+        driver consolidates the multiple image layers into a root filesystem for the mount
+        namespace of the container.
+
+      To put it differently, the driver controls how images and containers are stored and
+        managed on the Docker host.
+
+
+    - Docker supports several different graph drivers using a pluggable architecture.  The
+        preferred driver is 'overlay2', followed by 'overlay'.
+
+
 
 - Creating Images
 
