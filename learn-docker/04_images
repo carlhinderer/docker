@@ -185,11 +185,113 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 - Using Dockerfiles
 
+    - Dockerfiles provide a declarative way of building images.  For instance, here is a
+        Dockerfile used to containerize a Python 2.7 application.
+
+        # Dockerfile
+        FROM python:2.7                         # Layer 1 (Base Layer)
+        RUN mkdir -p /app                       # Layer 2
+        WORKDIR /app                            # Layer 3
+        COPY ./requirements.txt /app/           # Layer 4
+        RUN pip install -r requirements.txt     # Layer 5
+        CMD ["python", "main.py"]               # Layer 6
+
+
+      Each line of the Dockerfile results in a layer in the resulting image.  
+
+
+
 - The FROM Keyword
+
+    - Every Dockerfile starts with the 'FROM' keyword.  With it, we define which base image
+        we want to start building our custom image from.
+
+        # Build starting from Centos 7
+        FROM centos:7
+
+        # Build starting from official Python 2.7 image
+        FROM python:2.7
+
+        # Build starting from scratch
+        FROM scratch
+
+
 
 - The RUN Keyword
 
+    - The argument for the 'RUN' keyword is any valid Linux command.
+
+        # Install wget on Centos
+        RUN yum install -y wget
+
+        # Install wget on Ubuntu
+        RUN apt-get update && apt-get install -y wget
+
+
+        # Make a directory and navigate to it
+        RUN mkdir -p /app && cd /app
+
+        # Untar a file to new directory
+        RUN tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz
+
+
+        # We can also use multiline Linux commands
+        RUN apt-get update \
+          && apt-get install -y --no-install-recommends \
+            ca-certificates \
+            libexpat1 \
+            libffi6 \
+            libgdbm3 \
+            libreadline7 \
+            libsqlite3-0 \
+            libssl1.1 \
+          && rm -rf /var/lib/apt/lists/*
+
+
+
 - The COPY and ADD Keywords
+
+    - The 'COPY' and 'ADD' keywords are used to add some content to a base image.  Most 
+        of the time, these are source files (ie from a web application) or binaries
+        (from a compiled application).
+
+
+    - Both keywords are used to copy files and folders from the host onto the image that 
+        we're building.  They are very similar, except ADD also lets us copy and unpack
+        TAR files, as well as provide a URL as a source for files and folders to copy.
+
+
+        # Copy all files and folders in current dir to /app folder in container image
+        COPY . /app
+
+        # Copy everything in /web subfolder to /app/web in container image
+        COPY ./web /app/web
+
+        # Copy a single file into target folder and rename it
+        COPY sample.txt /data/my-sample.txt
+
+
+        # Unpack the tar file to the target folder
+        ADD sample.tar /app/bin/
+
+        # Copy remote file into target file
+        ADD http://example.com/sample.txt /data/
+
+
+    - Wildcards are allowed in the source path.
+
+        # Copy all files starting with 'sample'
+        COPY ./sample* /mydir/
+
+
+    - By default, all files and folders inside the image will have a UID and GID of 0.
+        For both the ADD and COPY commands, we can change the ownership using the 
+        '--chown' flag.
+
+        # Assigns UID of 11, GID of 22 to files added
+        ADD --chown=11:22 ./data/files* /app/data/
+
+
 
 - The WORKDIR Keyword
 
