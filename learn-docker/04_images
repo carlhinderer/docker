@@ -376,7 +376,92 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 - A Complex Dockerfile
 
+    -  Now, we can put these ideas together to create a more complex Dockerfile:
+
+        # Dockerfile
+        FROM node:9.4                   # Building image for Node application
+        RUN mkdir -p /app               # Create /app folder in image filesystem
+        WORKDIR /app                    # Defines new folder as working directory
+        COPY package.json /app/         # Copy package.json files into /app folder
+        RUN npm install                 # Run npm install using package.json
+        COPY . /app                     # Now that Node dependencies are installed, copy app files
+        ENTRYPOINT ["npm"]              # Run 'npm start' when container is run
+        CMD ["start"]
+
+
+
 - Building an Image
+
+    - In our home directory, we create a 'FundamentalsOfDocker' subdirectory.
+
+        # Create subdirectory
+        $ mkdir ~/FundamentalsOfDocker
+        $ cd ~/FundamentalsOfDocker
+
+
+    - Now, create a 'sample1' subfolder in that directory.
+
+        # Create subdirectory
+        $ mkdir sample1 && cd sample1
+
+
+    - In the ~/FundamentalsOfDocker/sample1 directory, create a file called 'Dockerfile'.
+
+        # Create Dockerfile
+        $ vim Dockerfile
+
+        # File contents
+        FROM centos:7
+        RUN yum install -y wget
+
+
+    - Now, build a new container image using the Dockerfile.
+
+        # Build image 
+        #   (with Dockerfile location specified)
+        #   (last argument is directory where Dockerfile is located)
+        $ docker image build -t my-centos -f Dockerfile .
+
+        # Build image 
+        #   (automatically looks for file 'Dockerfile')
+        $ docker image build -t my-centos .
+
+
+      Looking at the output of this command:
+
+        - The first thing the builder does is package the files in the current build
+            context (excluding the files and folders specified in the .dockerignore)
+
+            Sending build context to Docker daemon 2.048kB
+            ...
+
+        - Next, step 1/2 creates the base image:
+
+            Step 1/2 : FROM centos:7
+            7: Pulling from library/centos
+            af4b0a2388c6: Pull complete
+            Digest: sha256:2671f7a...
+            Status: Downloaded newer image for centos:7
+            ---> ff426288ea90
+            ...
+
+        - Next, step 2/2 installs wget, and the previous container created after step 1
+            is discarded:
+
+            Step 2/2 : RUN yum install -y wget
+            ---> Running in bb726903820c
+            ...
+            ...
+            Removing intermediate container bb726903820c
+            ---> bc070cc81b87
+
+        - Finally, we are given the ID for the complete image, which has the tag 
+            'my-centos:latest':
+
+            Successfully built bc070cc81b87
+            Successfully tagged my-centos:latest
+
+
 
 - Multistep Builds
 
