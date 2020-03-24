@@ -295,7 +295,84 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 - The WORKDIR Keyword
 
+    - The 'WORKDIR' keyword defines the working dirctory or context that is used when a 
+        container is run from our custom image.  All activity that happens after this
+        statement will use this directory as the working directory.
+
+
+        # This creates a file in /app/bin
+        RUN cd /app/bin
+        RUN touch sample.txt
+
+        # Same, but sets the context across the layers of the image
+        WORKDIR /app/bin
+        RUN touch sample.txt
+
+
+
 - The CMD and ENTRYPOINT Keywords
+
+    - The CMD and ENTRYPOINT keywords are special.  While all other keywords defined for a
+        Dockerfile are executed at the time the image is built by the Docker builder, 
+        these keywords are actually deifinitions of what will happen when the container is
+        started.
+
+      When the container runtime starts a container, it needs to know what the process or
+        application is that will be run inside the container.  CMD and ENTRYPOINT are used
+        to tell Docker what the start process is and how to start that process.
+
+
+    - To understand 2 keywords, look at this linux command:
+
+        # Linux command
+        $ ping 8.8.8.8 -c 3
+
+
+      The ENTRYPOINT keyword defines the command to be run and the CMD keyword defines the
+        parameters for the command.
+
+        # Dockerfile
+        FROM alpine:latest
+        ENTRYPOINT ["ping"]
+        CMD ["8.8.8.8", "-c", 3]
+
+
+    - For both ENTRYPOINT and CMD, the values are formatted as a JSON array of strings,
+        where the individual items correspond to the tokens of the expressions (separated
+        by whitespace).  This is called the 'exec form', and is the preferred way of
+        dealing with ENTRYPOINT and CMD.
+
+      Alternatively, we can use the 'shell form':
+
+          CMD command param1 param2
+
+
+    - Now we can build an image from the Dockerfile we just created and run it:
+
+        # Build pinger image
+        $ docker image build -t pinger .
+
+        # Run container from pinger image
+        $ docker container run --rm -it pinger
+
+
+    - To override the CMD and ENTRYPOINT options specified:
+
+        # Override the CMD arguments from the Dockerfile
+        $ docker container run --rm -it pinger -w 5 127.0.0.1
+
+        # Override the ENTRYPOINT
+        $ docker container run --rm -it --entrypoint /bin/sh pinger
+
+
+    - Note that again, we can just put the entire command into a CMD statement, but this is
+        not recommended.
+
+        # Put entire command expression in CMD
+        FROM alpine:latest
+        CMD wget -O - http://www.google.com
+
+
 
 - A Complex Dockerfile
 
