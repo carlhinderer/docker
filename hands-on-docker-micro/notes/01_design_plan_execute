@@ -1,0 +1,123 @@
+---------------------------------------------------------------------
+CHAPTER 1 - MAKING THE MOVE: DESIGN, PLAN, EXECUTE
+---------------------------------------------------------------------
+
+- The tools we will use include:
+
+    1. Python
+         To implement RESTful web services
+
+    2. Git and Github
+         To track and share changes
+
+    3. Docker
+         To use containers to standardize the operation of the microservices
+
+    4. Kubernetes
+         To coordinate the execution of multiple services
+
+    5. Cloud Services (such as Travis CI and AWS)
+         To leverage existing commercial solutions to problems
+
+
+
+- We will also cover practices and techniques for working effectively in a 
+    microservice-oriented environment:
+
+    1. Continuous Integration
+         To ensure that services are of a high quality and ready to be deployed
+
+    2. GitOps
+         For handling changes in infrastructure
+
+    3. Observability
+         For properly understanding what is happening in a live system
+
+    4. Practices and techniques aimed at improving teamwork
+         Within a single team and across multiple teams
+
+
+
+- Web Services
+
+    - A web service consists of:
+
+        - 1 or more servers (physical boxes, VMs, cloud instances)
+
+        - running a web server application (such as Nginx or Apache)
+
+        - to direct requests directed to ports 80 or 443 toward 1 or more Python workers 
+            (usually through the WSGI protocol) run by mod_wsgi (Apache), uWSGI, GNUnicorn, etc.
+
+
+    - If more than one server is used, there will be a load balancer to spread the load among 
+        them.  The server (or load balancer) needs to be accessible to the internet, so it
+        needs to have a dedicated DNS and a public IP address.
+
+
+    - Any other web framework will be similar: a frontend web server that exposes the HTTP/HTTPS
+        ports, and a backend that runs the monolith in a dedicated web server.
+
+
+
+- Liabilities of Monoliths
+
+    1. The code will increase in size, and even with strict boundaries, developers will have a
+         hard time understanding the entire code base.
+
+    2. There is an inefficient use of resources, since each web worker will require enough 
+         CPU/memory to handle any type of request.  Also, each worker may have it's own DB
+         connection, even if infrequently used.
+
+    3. There are issues with scaling the size of the development team, with more and more 
+         people stepping on each others' toes.
+
+    4. There are deployment limitations, since every concern will need to be shared across
+         teams.  A deployment will bring down the entire system.
+
+    5. There is an interdependency of technologies.  Updating dependencies can cause issues.
+         Using a new type of technology is often impossible.
+
+    6. A bug in a small part of the system can bring down the entire service.
+
+
+
+- The Microservices Approach
+
+    - A system with a 'microservices architecture' is a collection of loosely coupled
+        specialized services that work in unison to provide a comprehensive service.
+
+        1. Collection of specialized services
+             There are different, well-defined modules
+
+        2. Loosely coupled
+             Each of the microservices can be independently deployed
+
+        3. Work in unison
+             Each microservice is capable of communicating with others
+
+        4. Provide a comprehensive service
+             Our microservice system will need to replicate the same functionality of the 
+               monolith.
+
+
+
+- Advantages of Microservices
+
+    1. If communication is done with a standard protocol, each microservice can be programmed
+         in different technologies.  HTTP requests with data encoded in JSON is the most
+         standard and widely-used option.
+
+    2. We have better resource utilization.  If one microservice requires more memory, we can
+         reduce the number of worker copies.  We can decide which workers need to connect to
+         the DB.
+
+    3. Each individual service is smaller, which means it is easier to maintain, faster to add
+         features, and more easy to understand.
+
+    4. Some services can be hidden from external access.  This may improve the security of 
+         sensitive data or services.
+
+    5. Failure in one service does not necessarily mean the entire system won't be available.
+
+    6. Each service can be developed, deployed, and maintained seprately by separate developers.
