@@ -121,3 +121,99 @@ CHAPTER 1 - MAKING THE MOVE: DESIGN, PLAN, EXECUTE
     5. Failure in one service does not necessarily mean the entire system won't be available.
 
     6. Each service can be developed, deployed, and maintained seprately by separate developers.
+
+
+
+- Docker Containers
+
+    - Docker containers are very often used to deploy microservices.  They are:
+
+        1. Portable, since they are detached from the underlying platform and hardware
+
+        2. Very lightweight, since a minimum amount of data needs to be included
+
+        3. Secure, as the exposed attack surface of a container is relatively small
+
+
+    - We should always remember to keep containers small and single-purpose.  If we end up adding
+        several daemons and a lot of configuration, it probably needs to be split into several
+        containers.
+
+    - The 12-factor App Principles, a set of practices that have been proven successful in 
+        developing web applications, are very aligned with Docker containers.
+
+    - We should always remember that containers should be stateless.  Any state needs to be stored
+        in a database, and each containers stores no persistent data.  This is one of the key
+        elements for scalable web servers.
+
+    - We use Docker for the individual microservices, and we use Kubernetes as the orchestrator
+        that manages the whole cluster of services.
+
+
+
+- Parallel Deployment and Development Speed
+
+    - The single most important feature of microservices is the capacity to develop 
+        independently.  Each service should be able to be developed, tested, and
+        deployed separately from the other services.
+
+    - Note that situations in which backwards compatibility is being broken is a time when
+        strong coordination between teams is required.
+
+
+    - The traditional way of dividing teams is to have an operations team that is in charge
+        of infrastructure and any new deployments, since they are the only ones with access
+        to the production servers.
+
+      The microservices approach conflicts with this, since teams need control over their own
+        deployments.  Kubernetes helps in this situation, since it decouples maintenance of
+        infrastructure from deployment of services.
+
+
+
+- Challenges and Red Flags
+
+    - Systems get started as monoliths, since it is simpler and allows for quicker iteration.
+        In any new company, which is pivoting and changing the code, and searching for a 
+        successful business model, this is pivotal.
+
+      However, once the system matures, the company grows.  The more developers that get 
+        involved, the bigger the company gets, the more sense microservices make.
+
+
+    - Moving to microservices has its own problems:
+
+        1. Migrating to microservices requires a lot of effort, actively changes the way the
+             organization operates, and will be a big investment until it starts to pay off.
+
+        2. The switch requires cultural change, and people do not like change.  It forces
+             clarification of interfaces and APIs, and this can cause particular discomfort.
+
+        3. There is a learning curve in learning the tools and procedures.
+
+        4. Debugging a request across services is more difficult than with a monolith.
+             Reproducing bugs can be challenging.
+
+        5. Splitting a monolith requires careful consideration.  A bad division line can cause
+             services to be tightly coupled.
+
+        6. There's an overhead in creating microservices, as there's some work that gets 
+             replicated on each service.
+
+        7. A balance has to be struck on how much freedom to give individual teams.  You want
+             to avoid duplicated work and knowledge silos, but you want teams to be empowered
+             and independent.
+
+        8. In agile principles, working code is more important than comprehensive documentation.
+             However, in microservices, it is important that APIs be well documented to reduce
+             the amount of support between teams.  The best approach is to create self-documenting
+             services.
+
+        9. Each call to another service can increase the delay of responses.  This can produce
+             latency problems.
+
+
+    - Conway's Law
+
+        Organizations that design systems are constrained to produce designs which are copies
+          of the communications structures of the organization.
