@@ -220,12 +220,96 @@ CHAPTER 1 - MAKING THE MOVE: DESIGN, PLAN, EXECUTE
 
 
 
+- Analyzing the Current System
+
+    - The task of understanding the current system should never be underestimated.  It is likely
+        that no single person has a good understanding of the entire system.  The effort
+        involved will vastly depend on how structured the monolith.
+
+
+    - Our example application is a micro-blogging site called 'MyThoughts'.
+
+        Models:
+          UserModel
+          SessionModel
+          ThoughtModel
+
+        Urls:
+          /login
+          /logout
+          /thoughts/new
+          /thoughts
+          /search
+          /static 
+
+        Views:
+          login.py
+          thoughts.py
+          search.py
+
+        Templates:
+          login.html
+          search.html
+          list_thoughts.html
+          base.html
+
+        Static Assets:
+          bootstrap.css
+
+
+    - We can see some of the interdependencies:
+
+        1. The static data is isolated. It can be changed without reqiring changes anywhere else.
+
+        2. The search functionality is strongly related to the list of thoughts.  The template
+             is similar, and the data is displayed the same way.
+
+        3. Login and logout don't interact with ThoughtModel.  The edit the session, but the rest
+             of the application only reads it.
+
+        4. The base.html template generates the top bar, and it's used for all pages.
+
+
+
+- Ideas For How to Proceed
+
+    1. We could just leave it the way it is, and improve the things that need improving.
+
+
+    2. Searching for thoughts is pretty basic.  At the moment, we directly search the database.
+         If there are millions of thoughts, this won't be viable.  The code in 'search.py' could
+         call a specific search microservice, backed by a search engine such as Solr or
+         Elasticsearch.  This will scale the searches, and could add capabilites like search
+         filters.
+
+       Search is also read-only, so it may be a good idea to detach calls creating new thoughts
+         from calls searching them.
+
+
+    3. Authentication is also a different problem from reading and writing thoughts.  Splitting
+         it will allow us to keep on track for new security issues and have a team specifically
+         deal with those issues.
+
+       The rest of the application just needs a check for whether a user is logged in or not.
+
+
+    4. The frontend is pretty static.  Maybe we want to create a SPA using Angular or React.
+         To do that, we need a RESTful API microservice that is able to return thoughts and
+         searches.
+
+       In this case, the new microservice will be the frontend, which will be served as static,
+         precompiled code, and will pull from the backend.
+
+
+    5. The RESTful API backend will also be available to allow external developers to create
+         their own tools on top of the MyThoughts data, for example to build a native phone app.
+
+
+
+- Potential Architecture
+
 - Preparing and Adapting by Measuring Usage
 
-    - 
-
-
-    
 - Strategic Planning to Break the Monolith
 
 - The Replacement Approach
