@@ -1,0 +1,20 @@
+---------------------------------------------------------------------
+CHAPTER 6 - LOCAL DEVELOPMENT WITH KUBERNETES
+---------------------------------------------------------------------
+
+- Implementing Multiple Services
+
+- Describing the Users Backend Microservice
+
+- Describing the Frontend Microservice
+
+- Connecting the Services
+
+- Configuring the Services
+    - Configuring the Deployment
+    - Configuring the Service
+    - Configuring the Ingress
+
+- Deploying the Full System Locally
+    - Deploying the Users Backend
+    - Adding the Frontend

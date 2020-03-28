@@ -1,0 +1,26 @@
+---------------------------------------------------------------------
+CHAPTER 8 - USING GITOPS PRINCIPLES
+---------------------------------------------------------------------
+
+- Understanding GitOps
+
+- Managing Configuration
+
+- Understanding DevOps
+
+- Defining GitOps
+
+- Setting up Flux to Control the Kubernetes Cluster
+    - Starting the System
+    - Configuring Flux
+    - Configuring GitHub
+    - Forking the GitHub Repo
+    - Adding a Deploy Key
+    - Adding a Deploy Key
+    - Syncing Flux
+    - Making a Kubernetes Cluster Change Through GitHub
+
+- Working in Production
+    - Creating Structure
+    - Using GitHub Features
+    - Working with Tags
