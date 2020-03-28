@@ -1,0 +1,26 @@
+---------------------------------------------------------------------
+CHAPTER 12 - COLLABORATING & COMMUNICATING ACROSS TEAMS
+---------------------------------------------------------------------
+
+- Keeping a Consistent Architectural Vision
+
+- Dividing the Workload and Conway's Law
+    - Describing Conway's Law
+    - Dividing the Software into Different Kings of Software Units
+
+- Desiging Working Structures
+    - Structuring Teams Around Technologies
+    - Structuring Teams Around Domains
+    - Structuring Teams Around Customers
+    - Structuring Teams Around a Mix
+
+- Balancing New Features and Maintenance
+    - Regular Maintenance
+    - Understanding Technical Debt
+    - Continuously Addressing Technical Debt
+    - Avoiding Technical Debt
+
+- Designing a Broader Release Process
+    - Planning in the Weekly Release Meeting
+    - Reflecting on Release Processes
+    - Running Post-mortem Meetings
