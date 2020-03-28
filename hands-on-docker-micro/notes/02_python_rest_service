@@ -1,0 +1,33 @@
+---------------------------------------------------------------------
+CHAPTER 2 - PYTHON REST SERVICE
+---------------------------------------------------------------------
+
+- Creating a REST Service with Python
+
+- Analyzing the Thoughts Backend Microservice
+
+- Understanding the Security Layer
+
+- Desiging the RESTful API
+
+- Specifying the API Endpoints
+
+- Defining the Database Schema
+
+- Working with SQLAlchemy
+
+- Flask-RESTPlus
+
+- Handling Resources
+
+- Parsing Input Parameters
+
+- Serializing Results
+
+- Performing the Action
+
+- Authenticating the Requests
+
+- Defining the pytest Fixtures
+
+- Understanding test_token_validation.py

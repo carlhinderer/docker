@@ -1,0 +1,30 @@
+---------------------------------------------------------------------
+CHAPTER 3 - BUILD, RUN, & TEST YOUR SERVICE USING DOCKER
+---------------------------------------------------------------------
+
+- Building Your Service with a Dockerfile
+
+- Executing Commands
+
+- The Docker Cache
+
+- Building a Web Service Container
+
+- Configuring uWSGI
+
+- Refreshing Docker Commands
+
+- Operating with an Immutable Container
+
+- Testing the Container
+
+- Creating a PostgreSQL Container
+
+- Configuring Your Service
+
+- Deploying the Docker Service Locally
+
+- Pushing the Docker Image to a Remote Registry
+    - Obtaining Public Images From DockerHub
+    - Using Tags
+    - Pushing Into a Registry
