@@ -510,7 +510,74 @@ CHAPTER 1 - MAKING THE MOVE: DESIGN, PLAN, EXECUTE
 
 - Executing the Move
 
+    - The final step is to actually execute the change.  This is the longest and most
+        difficult part.  
+
+    - The most important objective during this phase is backward compatibility.  The new
+        system should behave exactly like the old system from an external point of view.
+
+
+
 - The Load Balancer
+
+    - A load balancer allows distributing HTTP requests among several backend resources.
+
+
+    - The main operation of a load balancer is to allow traffic to be directed to a single
+        address to be distributed among several identical backend servers that can spread 
+        the load and achieve better throughput.
+
+      Typically, the traffic is distributed through round-robin, but there are other options
+        as well.
+
+
+    - Load balancers allow rolling updates.  We can turn 1-2 servers off and update them, then
+        test that they are working correctly.  After verification, we can stop sending requests
+        to the old services, drain them, and turn them off, leaving only the new services.
+
+      If we replace the workers 1 by 1 in this fashion, it is a 'rolling update'.
+
+
+    - Any web server capable of acting in reverse proxy mode, such as NGINX, is capable of
+        working as a load balancer.  
+
+      HAProxy is the most complete option.  It specializes in working it situations with high
+        availability and high demand.  It's very configurable and works with other protocols 
+        besides just HTTP.
+
+      Cloud providers like AWS or Google also offer load balancer products.
+
+
+
+- Migrating to a Load Balancer
+
+    1. Create a new DNS for your current system.  This will allow you to refer to it
+         independently.
+
+    2. Deploy your load balancer, configured to serve the traffic to your old system on
+         the old DNS.  Create a DNS just for the load balancer so you can refer to it
+         specifically.  
+
+    3. Test that sending a request to the load balancer works the same way it worked 
+         without the load balancer.
+
+         # Send test request
+         $ curl --header "Host:old-dns.com" http://loadbalancer/path
+
+    4. Change the DNS to point to the load balancer IP.  Note that this takes time since
+         caches are involved.  It might even take a day or two.
+
+    5. The old IP is no longer in use.  The server can be removed from the external-facing
+         network.
+
+
+    - Note that because your load balancer is a single point of failure, you'll need to load
+        balance your load balancer!
+
+      The easiest way of doing it is creating several identical copies of HAProxy and adding
+        a cloud provider load balancer on top.
+
+
 
 - The Phases of Migration
 
