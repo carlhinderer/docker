@@ -379,11 +379,134 @@ CHAPTER 1 - MAKING THE MOVE: DESIGN, PLAN, EXECUTE
 
 - Strategic Planning to Break the Monolith
 
+    - The 'strangler pattern' is used to replace parts of a system gradually until the old system
+        is strangled and can be removed safely.
+
+
+    - There are 3 different possibilities for doing this:
+
+        1. Replace the older code with new code written from scratch for the new service.
+
+        2. Divide the existing code up and split it into new services.
+
+        3. Some combination of the 2.
+
+
+
 - The Replacement Approach
+
+    - Services are replaced in big chunks, only taking into account their external interfaces or
+        effects.  Note that this is still done one part at a time, chunk by chunk.
+
+    - Pros: You get to structure it however you want with the benefit of hindsight from the old
+              system.  You don't inherit any technical debt.  You get to use whatever tools you
+              want.  
+
+    - Cons: This can be very expensive and take a long time.  For old services that are undocumented,
+              this can be very difficult.  This approach can be taken if modules are stable, but
+              trying to do it while active development is going on is near impossible.
+
+    - This approach makes the most sense for old legacy systems that are small, especially if they
+        are implemented in an old tech stack that is difficult to maintain.
+
+
 
 - The Divide Approach
 
+    - If the system is well-structured, maybe some parts of it can just be copy-pasted and
+        wrapped in the minimal amount of code to allow it to be executed independently and
+        interface with other systems.
+
+
+
 - Change and Structured Approach
+
+    - In this phase of the project, we should analyze these elements:
+
+        1. An ordered plan of which microservices will be available first, taking the 
+             dependencies into account.
+
+        2. An idea of where the biggest pain points are, and whether working on them is a 
+             priority.  Pain points are elements that are worked with frequently, but there is
+             no easy way to deal with them.
+
+        3. What are the difficult cases and cans of worms?  Acknowledge they exist and minimize
+             their impact on other services.
+
+        4. How can we get a couple quick wins to keep the momentum of the project going?
+
+        5. What training do the existing employees need to work on the new services, and who
+             do we need to hire to fill in any gaps?
+
+        6. Are there team changes and who will own each new service?
+
+
+
+- Our Resulting Plan
+
+    - As a prerequisite, a load balancer will need to be in front of the operation.  This
+        will be responsible for channeling requests to the proper microservice.
+
+
+    - After that, static files will be served through their own independent service.  A
+        static web server is enough, though it will be deployed as an independent 
+        microservice.
+
+
+    - The code for authentication will be replicated in a new service.  It will use a RESTful
+        API to log in and generate a session, and to log out.  The service will be responsible
+        for checking whether a user exists or not, as well as adding and removing them.
+
+          1. The first idea was to check each session retrieved against the service, but since
+               this is a very common operation, we will make a package that will be shared
+               among all our externally faced microservices.  This package will allow
+               checking to see whether a session has been generated with our own service.
+               This will be achieved by signing the session cryptographically and sharing the
+               secret across our services.  This makes the session one that does not need to
+               be stored.
+
+          2. The Users backend needs to be able to allow authentication using OAuth 2.0 schema,
+               which will allow other external services not based on web browsers to 
+               authenticate and operate (for example, a mobile app).
+
+
+    - The Thoughts backend will also be replicated as a RESTful API.  
+
+
+    - After both backends are available, the current monolith will be changed from calling the
+        database directly to using the RESTful APIs of the backends.  After this is successfully
+        done, the old deployment will be replace with a Docker build and added to the load
+        balancer.
+
+
+    - The new API will be added externally to the load balancer and promoted as externally
+        accessible.
+
+                                          / static
+                                         /  Users Backend    --->  DB
+           Client  <--->  LoadBalancer --   Thoughts Backend --->  
+                                         \  HTML frontend
+                                          \
+
+
+
+- Technical Choices
+
+    - Each of the microservices will be deployed in its own Docker container.  We will set
+        up a Kubernetes cluster to orchestrate the different services.
+    
+    - The new backend services will be made in Flask using Flask-RESTPlus to generate a \
+        RESTful app and connect to the existing database with SQLAlchemy.
+
+    - The backend services will be served using the uWSGI server.
+
+    - The static files will be served using NGINX.
+
+    - NGINX will also be used as a load balancer to control the inputs.
+
+    - HTML frontend will continue to use Django.
+
+
 
 - Executing the Move
 
