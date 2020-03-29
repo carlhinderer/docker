@@ -583,6 +583,20 @@ CHAPTER 1 - MAKING THE MOVE: DESIGN, PLAN, EXECUTE
 
      1. The Pilot Phase
 
+          - Set up the infrastructure, learn tools, and set up the platform.
+          - Choose a couple non-critical services to start with that won't have a huge impact.
+          - Be sure to maintain backward compatibility.
+
+
      2. The Consolidation Phase
 
+          - Steadily add more teams to the microservices approach.  Give them support and training.
+          - Clarify and standardize your practices.
+          - Document standards and add requirements for production-ready services.  Get feedback.
+
+
      3. The Final Phase
+
+          - At this point, the monolith has been split and the architecture is now microservices.
+          - However, there is probably some weird functionality in the monolith, so it stays around!
+          - Allow teams to innovate with their own tools and architectures.
