@@ -308,7 +308,74 @@ CHAPTER 1 - MAKING THE MOVE: DESIGN, PLAN, EXECUTE
 
 - Potential Architecture
 
+    We propose this potential architecture:
+
+        Dynamic               static              Users Backend
+        Frontend    <--->                       /
+                              Proxy ----------- - Thoughts Backend
+                                                \
+                              HTML Frontend       Search Backend
+
+
+        1. Users backend
+             Responsible for all authentication tasks and keeping information about users
+
+        2. Thoughts backend
+             This will create and store thoughts.
+
+        3. Search backend
+             This will allow searching thoughts.
+
+        4. Proxy
+             Will route any request to the proper backend.  Must be externally accessible.
+
+        5. HTML Frontend
+             Will replicate any current functionality.  This will ensure that we work in a
+               backwards-compatible way and can make the transition smoothly.
+
+        6. Dynamic Frontend
+             Allowing clients to access the backend will allow the creation of other clients
+               than our HTML frontend.  A dynamic frontend server will be created, and there
+               are talks with another company to create a mobile app.
+
+        7. Static Assets
+             A web server capable of handling static files.  This will serve the CSS and 
+               Javascript files.
+
+
+
 - Preparing and Adapting by Measuring Usage
+
+    - To measure usage, we need 'observability', or the ability to know how a live system is
+        working.  The main tools for this are metrics and logs.
+
+
+    - If your application is a web service, it will have logs being created by default.  These 
+        will have the URL, result, and time for each web request.  This can provide good 
+        information about how much each URL is being called.
+
+
+
+- Changes to Architecture
+
+    1. The teams don't have a good knowledge of Angular or React, so we won't be creating a
+         new frontend for the time being.
+
+    2. The external mobile application will be created, so an externally accessible API is still
+         desirable.
+
+    3. After analyzing the logs, we see that search isn't used much, and it has to interact with
+         the Thoughts backend, so we'll just keep search under the Thoughts backend.
+
+    4. The Users backend has received well.
+
+                                static          Users backend
+                                               /
+         Phone App    <---->    Proxy----------
+                                               \
+                                HTML frontend    Thoughts backend
+
+
 
 - Strategic Planning to Break the Monolith
 
