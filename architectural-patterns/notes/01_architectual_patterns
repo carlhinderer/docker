@@ -163,3 +163,57 @@ CHAPTER 1 - ARCHITECTURAL PATTERNS
 
     - DDD is good if we have a complex domain and wish to improve understanding of it among
         the development team.
+
+
+
+- Client/Server Architecture
+
+    - This pattern segregates the system into 2 main applications, where the client makes
+        requests to the server.  In many cases, the server is a database with application
+        logic.  
+
+    - 2-Tier 
+
+        Client -> TCP/IP -> Server
+
+    - The P2P (Peer-to-Peer) pattern allows the client and server to swap their roles.  Each
+        system can be either a client or server.
+
+
+    - Benefits of the client/server pattern include:
+
+        1. Higher Security
+             Since data is stored on the server, not the clients
+
+        2. Centralized Data Access
+             Since data is stored only on the server, access and updates to data are far easier
+
+        3. Ease of Maintenance
+             We can spread the service across multiple machines for updates, scalability, and
+               availability.
+
+
+
+- Multi-tier Distributed Computing Architecture
+
+    - Adding multiple tiers has long been a goal.  Web, cloud, mobile, and other 
+        customer-facing applications use N-tier architectures.
+
+    - Components can be integrated through messages or RPCs (Remote Procedure Calls), 
+        RMIs (Remote Method Invocations), CORBA (Common Object Request Broker Architecture),
+        EJBs (Enterprise Java Beans), etc.
+
+
+
+- Layered/Tiered Architecture
+
+    - This is an improvement over the client/server pattern, and is the most commonly used
+        architectural pattern.  
+
+    - The most common pattern is:
+
+        1. Presentation/UI Layer (ie Web Browser)
+        2. Business Logic Layer (ie App/Web Server)
+        3. Data Persistence Layer (ie RDBMS)
+
+    - The MVC pattern is commonly used in production-grade web applications.
