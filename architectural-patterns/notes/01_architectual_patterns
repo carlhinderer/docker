@@ -90,3 +90,76 @@ CHAPTER 1 - ARCHITECTURAL PATTERNS
         systems.  It provides a set of predefined susbsystems and their responsibilities.
 
     - A 'design pattern' provides a scheme for refining the components of a system.  
+
+
+
+- Software Architecture Patterns
+
+    - Problems with Monoliths
+
+        1. Scalability
+             Monolithic applications are designed to run on a single and powerful system within
+               a process.  Increasing the application's speed or capacity requires switching
+               to newer and faster hardware.
+
+        2. Reliability and Availability
+             Any faults or bugs within a monolith can take the entire application offline.
+
+        3. Agility
+             Monolithic codebases become increasingly complex as new features are added, and 
+               release cycles are measured in longer and longer periods.
+
+
+    - Software patterns we will look at include:
+
+        - OOA
+        - CBD
+        - DDD
+        - Client/server architecture
+        - Multi-tier distributed architectures
+        - Layered/tiered architectures
+        - EDA
+        - SOA
+        - SOI
+        - Event-driven, service-oriented architecture
+
+
+
+- OOA (Object-Oriented Architecture)
+
+    - Objects are fundamental building blocks.  Then encapsulate properties and tasks in an
+        organized manner.  They communicate with each other through well-defined interfaces.
+
+    - The standard OOP principles (Inheritance, Polymorphism, Encapsulation) come in handy
+        when producing modular and reusable software applications.
+
+
+
+- CBD (Component-Based Assembly) Architecture
+
+    - Components expose well-defined interfaces for other components to find and communicate.
+        Components are reusable, replacable, substitutable, extensible, and independent.
+
+    - Design patterns such as the Dependency Injection pattern or Service Locator pattern can
+        be used to manage dependencies between components and provide loose coupling and 
+        reuse.
+
+    - AOP (Aspect-Oriented Programming) aims to increase modularity by separating cross-cutting
+        concerns.  Logging is the canonical example of this.
+
+    - ASOE (Agent-Oriented Software Engineering) is a paradigm that uses externally specified
+        agents and messaging instead of objects interacting.
+
+
+
+- DDD (Domain-Driven Design) Architecture
+
+    - Domain-driven design is an object-oriented approach to designing software based on
+        the business domain, its elements and behaviors, and the relationships between
+        them.  
+
+    - A domain model is created by business domain experts, and is created in the language
+        of the business domain.
+
+    - DDD is good if we have a complex domain and wish to improve understanding of it among
+        the development team.
