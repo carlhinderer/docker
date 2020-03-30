@@ -1,0 +1,92 @@
+---------------------------------------------------------------------
+CHAPTER 1 - ARCHITECTURAL PATTERNS
+---------------------------------------------------------------------
+
+- Trends and Transitions
+
+    - Prominent trends happening in ICT today include:
+
+        1. IT industrialization through cloud computing
+
+        2. IT compartmentalization through virtualization and containerization
+
+        3. IT consumerization through handhelds, wearables, mobiles, etc
+
+        4. Extreme and deep connectivity among all kinds of physical, electrical, mechanical,
+             and electronic systems throught the IoT
+
+        5. Cognitive IT to empower our everyday systems to be congnitive of their actions
+             and reactions
+
+
+    - With everything getting connected to each other, the amount of data getting generated,
+        collected, cleansed, and crunched goes up exponentially.  There are integrated
+        platforms for big, fast, streaming, and IoT data analytics to extricated useful
+        information out of data heaps.
+
+      The database paradigm is going through a slew of changes and challenges.
+
+
+    - The middleware domain is also changing as there are multiple heterogeneous systems that
+        need to be integrated and work together.
+
+
+    - Businesses expect their IT service providers to be innovative, transformative, and
+        disruptive in order to achieve more with less.
+
+
+
+- Software Patterns
+
+    - Software architecture is used to moderate the rising complexity of sortware systems.
+        It becomes even more important if new modules are being added.
+
+
+    - Architectures are generally decided by 3 crucial aspects:
+
+        1. The participating components
+        2. The distinct capabilities of each of those components
+        3. The connectivity between these components
+
+
+
+- Ingredients of a Software Pattern
+
+    1. Name
+         A meaningful and memorable way to refer to the pattern
+
+    2. Problem
+         Concise description of the problem at hand
+
+    3. Context
+         The initial state before the pattern is applied
+
+    4. Forces
+         Describes the relevant forces and constraints and how they interact/conflict
+
+    5. Solution
+         Clearly explains how to achieve the intended goals and objectives
+
+    6. Resulting Context
+         The state after the pattern has been applied
+
+    7. Examples
+         A few sample applications to illustrate each of the elements
+
+    8. Rationale
+         Give a convincing explanation of the pattern and its components
+
+    9. Related Patterns
+         Other patterns similar to this one
+
+    10. Known Uses
+         Known applications of the pattern in existing systems
+
+
+
+- Types of Software Patterns
+
+    - An 'architecture pattern' expresses a fundamental structural organization for complex
+        systems.  It provides a set of predefined susbsystems and their responsibilities.
+
+    - A 'design pattern' provides a scheme for refining the components of a system.  
