@@ -217,3 +217,89 @@ CHAPTER 1 - ARCHITECTURAL PATTERNS
         3. Data Persistence Layer (ie RDBMS)
 
     - The MVC pattern is commonly used in production-grade web applications.
+
+
+
+- EDA (Event-Driven Architecture)
+
+    - The client/server pattern has generally used the request-reply method of client/server
+        communication.  The communication is also synchronous.  The client must wait for
+        a response from the server.
+
+    - The world is eventually becoming event-driven.  Instead of request-reply, we have
+        fire-forget.  The communication is asynchronous.  There is no need for participating
+        applications to be online all the time.  EDA leads to highly decoupled systems.
+
+    - An event may signify a problem, an opportunity, a deviation, a state change, or a
+        threshold reached.
+
+    - Every event has an Event Header (id, event type, name, creator, timestamp) and an
+        Event Body (describes what happened).
+
+    - There are event processing engines, MoM (Message Oriented Middleware) solutions such as
+        messages queues and brokers to collect event data and messages.
+
+
+
+- 2 Main Topologies in Event-Driven Architectures
+
+    - Mediator Topology
+
+        Has a single event queue and a mediator which directs each of the events to relevant
+          event processors.  
+
+
+                                                         Event Processor
+                                                     /
+          Events  -->  Event Queue  -->  Mediator  ---   Event Processor
+                                                     \
+                                                         Event Processor
+
+
+    - Broker Topology
+
+        Has no event queue.  Event processors are responsible for obtaining events, processing,
+          and publishing another event indicating the end.
+
+
+                        Event  Event  Event
+                         Proc   Proc   Processor
+                             \   |   /
+          Events  -->       Event Broker
+                             /   |   \
+                        Event   Event  Event
+                         Proc    Proc   Processor
+
+
+
+- Major Issues With EDA
+
+    - The EDA pattern lacks the atomicity of transactions since there is no execution sequence
+        of events.  Results are expected to be provided at a later time, for instance through
+        callbacks.
+
+    - Testing an EDA system is harder due to the asynchronous nature of the processing.  
+
+
+
+- SOA (Service-Oriented Architecture)
+
+- SOI (Service-Inspired Integration)
+
+- Event-driven Service-oriented Architecture
+
+
+
+- The EDA Fundamental Principles
+
+- The ED-SOA Composite Pattern Benefits
+
+- Microservices Architecture
+
+- Event-Driven Microservices Patterns
+
+- Space-Based Architecture
+
+- Combining Architecture Patterns
+
+- Special-Purpose Architectures
