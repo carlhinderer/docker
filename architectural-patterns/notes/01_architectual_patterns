@@ -284,15 +284,108 @@ CHAPTER 1 - ARCHITECTURAL PATTERNS
 
 - SOA (Service-Oriented Architecture)
 
+    - Software systems and their subsystems are increasingly expressed and exposed as services.
+        Services are:
+
+        1. Self-defined
+        2. Autonomous
+        3. Interoperable
+        4. Publicly Discoverable
+        5. Assessable
+        6. Accessible
+        7. Reusable
+        8. Compostable
+
+
+    - If a service is used by multiple other services, formalizing the service with a contract is
+        paramount.  This includes QoS attributes such as availability, scalability, security, etc.
+
+    - SOA enables application functionality to be provided as a set of services.
+
+
+
 - SOI (Service-Inspired Integration)
 
+    - Services can integrate disparate and ditributed applications and data sources.  The 
+        ESB (Enterprise Service Bus) is the service middleware that enables service-based
+        integration of multiple assets and resources.
+
+    - The ESB facilitates interconnectivity, routing, remediation, enrichment, governance,
+        etc.  The ESB is the integration middleware for any service environment, where the
+        message is the basic unit of interaction between services.  
+
+
+    - For an example:
+
+        1. Application A is only capable of exporting files to a directory.
+
+        2. Application B would like to get some information out of an exported file in a SOAP
+             message over HTTP.  
+
+        3. The ESB can implement a 'message flow' that is triggered by the SOAP request message
+             from Application B and read the requested information from the file created by
+             Application A with a file adapter.
+
+
+
 - Event-driven Service-oriented Architecture
+
+    - Today, most SOA implements synchronous request-response interaction patterns to connect
+        different and distributed processes.  It does lead to tight coupling of application
+        functions due to the synchronous communication.
+
+    - Enterprises are becoming increasingly dynamic and real-time in their interactions.  SOA
+        is not good enough to handle real-time events asynchronously.  
+
+    - To get the best of both worlds, a new pattern of event-driven SOA is gaining attention.
 
 
 
 - The EDA Fundamental Principles
 
+    - In an asynchronous push-based messaging pattern, the EDA model builds on the pub/sub model
+        to push a variety of real-time notifications and alerts out to the subscribed listeners
+        in a fire-and-forget fashion.  
+
+      This neither blocks nor waits for a synchronous response.  Also, this is a unidirectional
+        and asynchronous pattern.
+
+
+    - Autonomous Messages
+
+        - Events are communicated in the form of autonomous messages.  That is, each message 
+            contains just enough details to represent a unit of work.  
+
+        - Event messages should not require any additional context. They should not require any 
+            dependency on in-memory state of the connected applications.
+
+        - The event message is simply intended to communicate the business state transitions
+            of each application, domain, or workgroup within an enterprise.
+
+
+    - Decoupled and Distributed Systems
+
+        - The EDA pattern logically decouples connected systems.  SOA guarantees loose and 
+            light coupling.  The middleware (ESB) takes care of unobtrusively delivering the
+            message to the target application.
+
+        - The transactions load of one system does not need to influence or depend on the 
+            service levels of downstream systems.
+
+
+    - Receiver-Driven Flow Control
+
+        - The EDA pattern shifts control-flow responsiblilty away from an event source (or 
+            sender system) and distributes/delegates it to event receivers.
+
+
+
 - The ED-SOA Composite Pattern Benefits
+
+    - 
+
+
+
 
 - Microservices Architecture
 
