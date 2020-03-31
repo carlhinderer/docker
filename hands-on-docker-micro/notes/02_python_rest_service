@@ -2,15 +2,131 @@
 CHAPTER 2 - PYTHON REST SERVICE
 ---------------------------------------------------------------------
 
-- Creating a REST Service with Python
-
 - Analyzing the Thoughts Backend Microservice
+
+    - This is the diagram we created in the last chapter:
+
+
+                                          ---> static
+                                         /
+                                        /----> Users backend ---------\
+         Client  <--->  Load Balancer --                                DB
+                                        \----> Thoughts backend ------/
+                                         \
+                                          ---> HTML frontent
+
+
 
 - Understanding the Security Layer
 
+    - Since the Thoughts backend is going to be availability externally, we need to implement
+        a security layer.  We need to identify the user producing the actions and verify
+        their validity.
+
+
+    - This security layer will come in the shape of a header.  This header will contain 
+        information that is signed by the users backend, verifying its origin.  It will be a
+        JWT (JSON Web Token), which is standard for this purpose.
+
+      A JWT is not the only possibility for the token.  There are other alternatives such as 
+        storing the equivalent data in a session cookie or using similar modules such as PASETO.
+
+
+    - This method should be handled by the Users Backend team, and get packages so that the
+        other microservices can use it.  For this chapter, we'll include it in the Thoughts
+        Backend, but later we'll move it to the Users Backend.
+
+
+    - If the requests don't have a valid header, the API will return a 401 Unauthorized status
+        code.
+
+
+
 - Desiging the RESTful API
 
+    - We will use RESTful design for our API, which means we will construct URIs that
+        represent resources and then use HTTP methods to perform actions on these resources.
+
+        Http Methods
+        ----------------
+        GET      retrieve
+        POST     create
+        DELETE   delete
+        PUT      overwrite completely
+        PATCH    partial update
+
+
+    - With RESTful APIs, requests need to be stateless, so each request is totally self-contained
+        and can be served by any server.  All required data should either be at the client or
+        in the database.  This is a hard requirement for Docker containers.
+
+
+    - It is common to have resources that map directly to database tables, but this is not 
+        necessary.  Resources can be compositions or aggregations of different tables also.  The
+        database schema should not constrain our service APIs.
+
+
+
 - Specifying the API Endpoints
+
+    - Here is our API interface:
+
+        Method      Endpoint             Requires            Returns
+                                         Authentication
+        -----------------------------------------------------------------------------------
+        GET     /api/me/thoughts           Yes               List of thoughts for the user
+
+        POST    /api/me/thoughts           Yes               The newly created thought
+
+        GET     /api/thoughts              No                List of all thoughts
+
+        GET     /api/thoughts/X/           No                The thought with id X
+
+        GET     /api/thoughts/?search=X    No                Search all thoughts that contain X
+
+        DELETE  /admin/thoughts/X/         No                Deletes thought with id X
+
+
+
+    - Note that there are 2 elements of the API:
+
+        1. A public api, starting with /api
+
+            - An authenticated public API, starting with /api/me.  The user needs to be
+                authenticated to perform these actions.  A non-authenticated request 
+                will return a '401 Unauthorized'.
+
+            - A non-authenticated public api, starting with /api.  Any user can perform
+                these actions, even if they are not authenticated.
+
+
+        2. An admin api, starting with /admin
+
+            - This won't be exposed publicly.  It allows you to do operations that are not
+                designed to be done by customers.
+
+
+
+    - The format of a thought is:
+
+        thought
+        {
+            id integer
+            username string
+            text string
+            timestamp string($date-time)
+        }
+
+        - To create one, only the text needs to be sent.  The timestamp and id are created
+            automatically, and the username is detected by the authentication data.
+
+
+    - There is some debate over whether it's best to end URIs with a final slash or not.  When
+        working with Flask, defining them with a slash will cause requests without a slash to
+        return a '308 Permanent Redirect'.  In any case, we should be consistent to avoid
+        confusion.
+
+
 
 - Defining the Database Schema
 
