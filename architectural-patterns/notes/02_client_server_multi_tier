@@ -1,0 +1,42 @@
+---------------------------------------------------------------------
+CHAPTER 2 - CLIENT/SERVER MULTI-TIER APPLICATIONS
+---------------------------------------------------------------------
+
+- DNS Servers and DNS Clients
+
+- Functional Requirements in a Client-Server Pattern
+
+- The 3-Tier / Multi-Tier Pattern
+
+
+- 2-Tier Client-Server Architecture
+
+    - The Master-Slave Pattern
+    - Peer-to-Peer Patterns
+    - Advantages of Two-Tier Client-Server Patterns
+    - Design Considerations
+    - Limitations of Two-Tier Patterns
+
+
+- 3-Tier Client-Server Architecture
+
+    - Design Considerations
+
+
+- n-Tier Architectures
+
+    - Design Considerations
+    - Example
+
+
+- Web Application Architecures
+
+    - The MVC Pattern
+    - The MVP Pattern
+    - The MVVM Pattern
+
+
+- Design Patterns for Web Application Development
+
+    - The front controller pattern
+    - Spring framework
