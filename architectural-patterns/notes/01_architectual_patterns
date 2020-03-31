@@ -449,3 +449,52 @@ CHAPTER 1 - ARCHITECTURAL PATTERNS
         remain on the partition, available to other consumers, even after they are delivered.
 
       Older messages are automatically deleted based on the stream's time-to-live setting.
+
+
+
+- Space-Based Architecture
+
+    - Traditionally, enterprise applications used RDBMS's.  This works well as long as the 
+        database is able to keep up with the load.  
+
+      However, as we scale up the number of concurrent users, the database will usually be the
+        limiting factor in how many transactions we can process concurrently.  
+
+
+    - There are many caching technologies and database scaling products to help address these 
+        issues, but they are limited in how much they can increase the load on a RDBMS.
+
+
+    - Space-based architecture is designed to allow software systems to work under a heavy load.
+        This is achieved by splitting up both the processing and storage between multiple servers.
+        This pattern is widely used to address and solve scalability and concurrency issues.
+
+
+    - High scalability is achieved by removing the central database constraint and using replicated
+        in-memory grids instead.  Application data is kept in-memory and replicated among all active
+        processing units.
+
+      Units can be dynamically started up and shut down as the load increases and decreases.  
+        Because the database bottleneck is removed, near-infinite scaling can be provided.
+
+
+
+- Special-Purpose Architectures
+
+    - In an IoT world, connected things (sensors, actuators, robots, drones, beacons, machines,
+        equipment, instruments, wares, utensils, etc.) enable software to be context-aware.
+
+      There are IoT data analytics platforms, with a growing list of event sources, enabling
+        frameworks, processes, and products aimed towards producing context-aware applications
+        across industry verticals.
+
+
+        Data Producers      Data Collector         Data Processing          Data Consumers
+        --------------      --------------         ---------------          --------------
+        IoT Sensor                                 Context Broker           Databases
+        Social Networks --> Message Adapter ---->  Prediction Module ---->  Endpoints
+        Databases                           REST   Event Subscriber  REST   Users
+                                            API                      API
+
+                            |_______________________________________|
+                                         Single Device
