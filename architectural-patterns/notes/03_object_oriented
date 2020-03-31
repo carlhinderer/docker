@@ -1,0 +1,63 @@
+---------------------------------------------------------------------
+CHAPTER 3 - OBJECT-ORIENTED SOFTWARE ENGINEERING PATTERNS
+---------------------------------------------------------------------
+
+- Elements of OOD
+
+
+- SOLID Principles
+
+    - Single Responsibility Principle
+    - Open and Close Principle
+    - Liskov Substitution Principle
+    - Interface Segregation Principle
+    - Dependency Inversion Principle
+
+
+- Other Common Design Principles
+
+
+- Creational Design Patterns
+
+    - Factory Method (Virtual Constructor)
+    - Abstract Factory (Kit)
+    - Builder
+    - Prototype
+    - Singleton
+
+
+- Structural Design Patterns
+
+    - Adapter Class (Wrapper)
+    - Adapter (Object)
+    - Bridge
+    - Composite
+    - Decorator
+    - Facade
+    - Flyweight
+    - Proxy
+
+
+- Behavioral Patterns
+
+    - Chain of Responsibility
+    - Command
+    - Interpreter
+    - Iterator
+    - Mediator
+    - Memento
+    - Observer
+    - State
+    - Strategy
+    - The Template Method
+    - Visitor
+
+
+- Concurrency Design Patterns
+
+    - Producer-consumer
+    - Active object
+    - Monitor object
+
+
+- Concurrency Architectural Pattern
