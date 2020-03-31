@@ -382,17 +382,70 @@ CHAPTER 1 - ARCHITECTURAL PATTERNS
 
 - The ED-SOA Composite Pattern Benefits
 
-    - 
+    - Effective Data Integration
 
+        - In synchronous request-driven architecture, the focus is on process-oriented 
+            integration.  This means that data integration is not natively supported.  
+
+        - But in the case of EDA, data integration is intrinsically accomplished, since the 
+            message is the base unit of collaboration and communication.
+
+
+    - Timeliness and Trustworthiness
+
+        - Events are propogated to all the participating applications in real-time.  This timely
+            exchange allows systems to have the most accurate and recent view of the business
+            state.
+
+
+    - Improved Scalability and Sustainability
+
+        - Asynchronous systems tend to be more scalable than synchronous systems.  
+
+        - Message queues and brokers can be made more stateless, reducing the overall complexity
+            of distributed systems.
 
 
 
 - Microservices Architecture
 
+    - The SOA model relies on a shared data model with multiple hierarchies.  The sharing of
+        databases tends to create tight coupling between services and other system components.
+
+      For instance, if a few REST services are tightly coupled with a backend database, and if
+        there is any change made on the database schema, all the services will need to be
+        retested with the new schema.
+
+
+    - The microservices pattern is a fast-growing architectural style.  Microservices are built
+        on the concept of 'bounded context', which leads to a self-contained association between
+        a single service and its data.
+
+      Every microservice has its own data source, which can be a SQL database, a NoSQL database,
+        an in-memory cache, etc.
+
+
+    - Docker containers have emerged as the most appropriate runtime for microservices.
+
+
+
 - Event-Driven Microservices Patterns
 
-- Space-Based Architecture
+    - Microservice applications are being enable to be event-driven.  For instance, the 'event
+        stream' pattern is increasing in popularity.
 
-- Combining Architecture Patterns
 
-- Special-Purpose Architectures
+    - Messaging technologies that can be used include Apache Kafka, RabbitMQ, or even event-driven
+        NoSQL data grids like Apache Geode.
+
+
+    - In the MSA approach, a common architecture pattern is event sourcing using an append-only data
+        stream such as Kafka or MapR streams (which implements Kafka).
+
+      Events are grouped into logical collections of events called 'topics'.  Topics are partitioned
+        for parallel processing.  We can think of a partitioned topic as a queue.
+
+      Events are delivered in the order they are received.  Unlike a queue, events are persisted and
+        remain on the partition, available to other consumers, even after they are delivered.
+
+      Older messages are automatically deleted based on the stream's time-to-live setting.
