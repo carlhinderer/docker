@@ -1,0 +1,54 @@
+---------------------------------------------------------------------
+CHAPTER 4 - ENTERPRISE INTEGRATION PATTERNS
+---------------------------------------------------------------------
+
+- Need For Integration Patterns
+
+
+- Integration Scenarios in Enterprises
+
+    - Information Portal
+    - Data Replication
+    - Shared Business Function
+    - Service-Oriented Architecture
+    - Distributed Business Process Management
+
+
+- The B2B Integration
+
+    - Main Challenges to Enterprise Integration
+    - File Transfer
+    - Shared Database
+    - Remote Procedure Invocation
+    - Messaging
+
+
+- Messaging Patterns
+
+    - Getting Started
+    - Pipe and Filter Pattern
+    - Message Router Pattern
+    - Message Translator Pattern
+    - Message Endpoint Pattern
+    - Point-to-Point Channel Pattern
+    - Publish-Subscribe Channel Pattern
+    - Datatype Channel Pattern
+
+
+- Message Bus Patterns
+
+    - Command Message Patterns
+    - Event Message Patterns
+    - Request-Reply Pattern
+    - Content-Based Router Pattern
+    - Message Filter Pattern
+    - Resequencer Pattern
+    - Polling Consumer Pattern
+    - Channel Adapter
+    - Mobile Integration Pattern
+    - Request-Response Pattern
+
+
+- Defining a Push Notification Pattern
+
+- API Management Pattern
