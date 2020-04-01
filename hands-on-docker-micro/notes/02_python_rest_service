@@ -201,7 +201,78 @@ CHAPTER 2 - PYTHON REST SERVICE
 
 - Flask-RESTPlus
 
+    - We implement the microservice using Flask-RESTPlus, a Flask extension.  Flask is a
+        Python microframework for web applications that is particularly good at
+        implementing microservices.
+
+      It uses the WSGI protocol.
+
+
+    - Flask by itself is capable of implementing a RESTful interface, but Flask-RESTPlus adds
+        some interesting capabilities good for speeding up development.
+
+        1. It defines namespaces, which adds structure to the code and helps with long-term
+             maintenance.
+
+        2. It has a full solution for parsing input parameters.  It allows defining arguments
+             in the body of the request, headers, query strings, or even cookies.
+
+        3. It has a serialization framework for the resulting objects.  Flask-RESTPlus calls it
+            'response marshalling'.  This helps define objectsa that can be reused.
+
+        4. It has full Swagger API documentation support.  Swagger is an open source project to
+             help in the design, implementation, documentation, and testing of RESTful API
+             services, following standard OpenAPI specs.  We can use this to automatically 
+             generate API documentation.
+
+
+    - We will use the 'Flask-SQLAlchemy' connector for database access.  To run the tests, the
+        'pytest-flask' module creates some fixtures ready to work with the Flask application.
+
+
+
 - Handling Resources
+
+    - A typical RESTful application has the following structure:
+
+        1. A URL-defined resource, which allows one or more actions through HTTP methods.
+
+        2. When each of the actions is called, the framework routes the request until the defined
+             code executes the action.
+
+        3. If there are any input parameters, they'll need to be validated first.
+
+        4. Perform the action and obtain a result value.  This normally requires one or more calls
+             to the database.
+
+        5. Prepare the resulting result value and encode it in a way that's understood by the client,
+             typically in JSON.
+
+        6. Return the encoded value to the client with the correct status code.
+
+
+
+    - Here is a simplified example:
+
+        api_namespace = Namespace('api', description='API operations')
+
+        @api_namespace.route('/thoughts/<int:thought_id>/')
+        class ThoughtsRetrieve(Resource):
+
+            @api_namespace.doc('retrieve_thought')
+            @api_namespace.marshal_with(thought_model)
+            def get(self, thought_id):
+                '''
+                Retrieve a thought
+                '''
+                thought = ThoughtModel.query.get(thought_id)
+                if not thought:
+                    # The thought is not present
+                    return '', http.client.NOT_FOUND
+        
+                return thought
+
+
 
 - Parsing Input Parameters
 
