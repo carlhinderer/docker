@@ -361,6 +361,80 @@ CHAPTER 2 - PYTHON REST SERVICE
 
 - Serializing Results
 
+    - Now, we need to return our results.  The easiest way to do this is by defining the
+        shape of the JSON result through a serializer or marshalling object.
+
+      A serializer model is defined as a dictionary with the expected fields and a field
+        type:
+
+        from flask_restplus import fields
+
+        model = {
+            'id': fields.Integer(),
+            'username': fields.String(),
+            'text': fields.String(),
+            'timestamp': fields.DateTime(),
+        }
+        thought_model = api_namespace.model('Thought', model)
+
+
+    - The model will take a Python object, and convert each of the attributes into the 
+        corresponding JSON element:
+
+        @api_namespace.marshal_with(thought_model)
+        def post(self):
+            ...
+
+
+    - Any values not present in the memory object will be set to None by default.
+
+
+    - Functions can be used in serializers to return dynamic information:
+
+        model = {
+            'timestamp': fields.DateTime(default=datetime.utcnow),
+        }
+
+
+    - We can specify the name of the attribute to be serialized for a field or use a lambda
+        function to retrieve the value:
+
+        model = {
+           'thought_text': fields.String(attribute='text'),
+           'thought_username': fields.String(attribute=lambda x: x.username),
+        }
+
+
+    - For more complex objects, we can nest values:
+
+        extra = {
+            'info': fields.String(),
+        }
+        extra_info = api_namespace.model('ExtraInfo', extra)
+
+        model = {
+           'extra': fields.Nested(extra),
+           'extra_list': fields.List(fields.Nested(extra)),
+        }
+
+
+    - If you return a list of elements, add the 'as_list=True' parameter in the 'marshal_with'
+        decorator:
+
+        @api_namespace.marshal_with(thought_model, as_list=True)
+        def get(self):
+            ...
+
+
+    - By default, a '200 OK' status code will be returned, but we can specify a different
+        status code to return:
+
+        @api_namespace.marshal_with(thought_model, code=http.client.CREATED)
+        def post(self):
+            ...
+
+
+
 - Performing the Action
 
 - Authenticating the Requests
