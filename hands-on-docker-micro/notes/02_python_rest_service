@@ -276,11 +276,96 @@ CHAPTER 2 - PYTHON REST SERVICE
 
 - Parsing Input Parameters
 
+    - There are 2 main kinds of input parameters:
+
+        1. String query parameters encoded in the URL.  
+
+             - These are normally used for the GET requests, and look like the following:
+
+                 http://test.com/some/path?param1=X&param2=Y
+
+             - They are part of the URL and will be stored in any log along the way.  The
+                 parameters are encoded into their own format, called 'URL encoding'.  For 
+                 instance, spaces are transformed to %20.
+
+
+        2. In the body of the HTTP request.
+
+             - The body of the HTTP request is typically used by POST and PUT requests.  The 
+                 format of the body is specified in the 'Content-Type' header.  The default
+                 value of this header is 'application/x-www-form-urlencoded', but many
+                 modern applications use 'application/json'.
+
+             - The body of the requests is not stored in a log.
+
+
+    - GET requests are expected to be idempotent, so they can be cached by proxies or other
+        elements.
+
+
+    - There are 2 other places to pass parameters that can also be used:
+
+        3. As part of the URL
+
+             - Things such as thought/id are parameters.
+
+        4. In headers
+
+             - Normally, headers give information about metadata, such as the format of the
+                 request, the expected format, or authenticated data.  But, they need to
+                 be treated as input parameters as well.
+
+
+
+- Example - Parsing Headers
+
+    - Here is an example of parsing headers:
+
+        # Create new parser
+        authentication_parser = api_namespace.parser()
+
+        # Authorization parameter is not required, will be set to None if not present
+        authentication_parser.add_argument('Authorization', 
+                                           location='headers', 
+                                           type=str, 
+                                           help='Bearer Access Token')
+
+        # Add authentication parser to thought parser
+        thought_parser = authentication_parser.copy()
+
+        # Text parameter is required
+        thought_parser.add_argument('text', 
+                                    type=str, 
+                                    required=True, 
+                                    help='Text of the thought')
+
+        # Will immediately stop and return '401 Unauthorized' if header isn't present
+        def authentication_header_parser(value):
+            username = validate_token_header(value, config.PUBLIC_KEY)
+            if username is None:
+                abort(401)
+            return username
+
+        # Process action
+        @api_namespace.route('/me/thoughts/')
+        class MeThoughtListCreate(Resource):
+        
+            @api_namespace.expect(thought_parser)
+            def post(self):
+                args = thought_parser.parse_args()
+                username = authentication_header_parser(args['Authorization'])
+                text=args['text']
+                ...
+
+
+
 - Serializing Results
 
 - Performing the Action
 
 - Authenticating the Requests
+
+- Testing the Code
 
 - Defining the pytest Fixtures
 
