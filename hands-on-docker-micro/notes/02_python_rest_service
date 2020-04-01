@@ -130,7 +130,74 @@ CHAPTER 2 - PYTHON REST SERVICE
 
 - Defining the Database Schema
 
+    - The database schema is simple and inherited from the monolith.  For the moment, we're
+        only worried about the thoughts table.
+
+
+        Field     Type                   Comments
+        --------------------------------------------------------
+        id         INTEGER NOT NULL      Primary key
+
+        username   VARCHAR(50)
+
+        text       VARCHAR(250)
+
+        timestamp  DATETIME              Creation time
+
+
+
+    - This table is represented in code in the 'thoughts_backend/models.py' file, described in
+        SQLAlchemy format with the following code:
+
+
+        class ThoughtModel(db.Model):
+            id = db.Column(db.Integer, primary_key+true)
+            username = db.Column(db.String(50))
+            text = db.Column(db.String(250))
+            timestamp = db.Column(db.DateTime, server_default=func.now())
+
+
+      SQLAlchemy is capable of creating the table for testing purposes or for development mode.
+        In this chapter, we will use SQLite as the database.
+
+
+
 - Working with SQLAlchemy
+
+    - SQLAlchemy is a powerful Python ORM.  It abstracts database access using Python objects.
+        It is quite flexible and has functionality for working close to the database or with
+        more layers of abstraction.
+
+
+    - After we define a model, we can perform a query by using the 'query' attribute and
+        filtering accordingly.
+
+        # Retrive a single thought by its primary key
+        thought = ThoughtModel.query.get(thought_id)
+
+        # Retrieve all thoughts filtered by a username
+        thoughts = ThoughtModel.query.
+                                filter_by(username=username).
+                                order_by('id').
+                                all()
+
+
+    - Storing and deleting a row requires the use of the session and then committing it.
+
+        # Create a new thought
+        new_thought = ThoughtModel(username=username, text=text, timestamp=datetime.utcnow())
+        db.session.add(new_thought)
+        db.session.commit()
+
+        # Retrieve and delete a thought
+        thought = ThoughtModel.query.get(thought_id)
+        db.session.delete(thought)
+        db.session.commit()
+
+
+    - We configure database access in the 'thoughts_backend/db.py' file.
+
+
 
 - Flask-RESTPlus
 
