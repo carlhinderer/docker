@@ -437,7 +437,68 @@ CHAPTER 2 - PYTHON REST SERVICE
 
 - Performing the Action
 
+    - Finally, we have the input data clean and ready to use, and we know how to return
+        the result.  Our action usually involves some database query and composing the 
+        results.
+
+        @api_namespace.route('/thoughts/')
+        class ThoughtList(Resource):
+        
+            @api_namespace.doc('list_thoughts')
+            @api_namespace.marshal_with(thought_model, as_list=True)
+            @api_namespace.expect(search_parser)
+            def get(self):
+                '''
+                Retrieves all the thoughts
+                '''
+                args = search_parser.parse_args()
+                search_param = args['search']
+
+                # Action
+                query = ThoughtModel.query
+                if search_param:
+                    query =(query.filter(ThoughtModel.text.contains(search_param)))
+        
+                query = query.order_by('id')
+                thoughts = query.all()
+
+                # Return the result
+                return thoughts
+
+
+
 - Authenticating the Requests
+
+    - The logic for authentication is encapsulated in the 'thoughts_backend/token_validation.py'
+        file.  The following functions generate the 'Bearer' token.
+
+
+    - This code generates a JWT payload:
+
+        # Encode token using the RS256 algorithm
+        def encode_token(payload, private_key):
+            return jwt.encode(payload, private_key, algorithm='RS256')
+        
+        def generate_token_header(username, private_key):
+            '''
+            Generate a token header base on the username. 
+            Sign using the private key.
+            '''
+            payload = {
+                'username': username,
+                'iat': datetime.utcnow(),                       # Generation time
+                'exp': datetime.utcnow() + timedelta(days=2),   # Expiration time
+            }
+            token = encode_token(payload, private_key)
+            token = token.decode('utf8')
+            return f'Bearer {token}'
+
+
+      The JWT payload includes the username to be used as a custom value, the generation time,
+        and the expiration time.  The token is then encoded using the RS256 algorithm, with a
+        private key, and returned in the proper format 'Bearer <token>'.
+        
+
 
 - Testing the Code
 
