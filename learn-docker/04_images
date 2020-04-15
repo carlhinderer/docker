@@ -530,7 +530,70 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 - Dockerfile Best Practices
 
+    - We need to always remember that containers are meant to be ephemeral.  A container can 
+        be stopped and destroyed, and a new one can be built and put in its place with a
+        minimum of setup and config.  We should try to keep setup and teardown times low.
+
+
+    - We should order commands in the Dockerfile to use caching as much as possible.  For 
+        instance, when we're rebuilding a previously built image, and one layer needs to
+        be rebuilt, all the subsequent layers also need to be rebuilt.
+
+        # 'npm install' gets re-run every time changes are made to /app
+        FROM node:9.4
+        RUN mkdir -p /app
+        WORKIR /app
+        COPY . /app
+        RUN npm install
+        CMD ["npm", "start"]
+
+        # 'npm install' is not re-run every time
+        FROM node:9.4
+        RUN mkdir -p /app
+        WORKIR /app
+        COPY package.json /app/
+        RUN npm install
+        COPY . /app
+        CMD ["npm", "start"]
+
+
+    - It's also a good idea to keep your total number of layers low when possible.  The more
+        layers there are, the more work the graph driver has to do to build a container.
+
+        # Combine multiple statements into a single layer
+        RUN apt-get update \
+            && apt-get install -y ca-certificates \
+            && rm -rf /var/lib/apt/lists/*
+
+
+    - Reduce the image size by using a .dockerignore file.  Avoid copying unnecessary files
+        and folders into an image.
+
+
+    - Avoid installing unnecessary packages into the filesystem of the image.  Keep the image as
+        lean as possible.
+
+
+    - Use multi-stage builds so that the resulting image is as small as possible and only contains
+        the absolute minimum  needed to run your application or service.
+
+
+
 - Saving and Loading Images
+
+    - The 3rd way to create a new container image is by importing or loading it from a file.
+        A container image is nothing more than a tarball.
+
+        # Export an existing image to a tarball
+        $ docker image save -o ./backup/my-alpine.tar my-alpine
+
+
+    - To load an image into the system from a tarball:
+
+        # Load an image
+        $ docker image load -i ./backup/my-alpine.tar
+
+
 
 - Sharing or Shipping Images
 
