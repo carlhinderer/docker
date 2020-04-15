@@ -595,6 +595,84 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 
 
+- Example - Containerizing a Legacy App
+
+    - Usually, we find ourselves maintaining complex legacy apps with sparse documentation.
+        Sometimes, we can use containers to make those apps easier to manage.
+
+
+    - We should analyze external dependencies.  For instance, we should ask questions like:
+
+        1. Does it use a database?  Which one?  What does the connection string look like?
+
+        2. Does it use external APIs?  What are the API keys and key secrets?
+
+        3. Is it consuming from or publishing to an Enterprise Service Bus?
+
+
+    - Next, we want to locate all of the source code and other assets.  Ideally, they should be
+        located in a single folder.  If they aren't, we can use the ADD and COPY commands to
+        copy components from the various sources.
+
+      Then, we need to find out how the application was built and packaged.  For instance, using
+        Maven (Java), MSBuild (.NET), or make (C or C++).  
+
+
+    - Applications need to be configured.  For instance, they have logging settings, connection
+        strings to DBs, hostnames and URIs for services, etc.  We differentiate 3 types of 
+        configurations:
+
+        1. Build time   = Needed during building of application and docker image.
+
+        2. Environment  = Varies depending on the environment in which the application is running
+                            (ie DEVELOPMENT, STAGING, PRODUCTION).  These configurations are
+                            applied at runtime.
+
+        3. Runtime      = This is information the application retrieves during runtime, such as
+                            secrets to access an external API.
+
+
+    - Every mission-critical enterprise app needs to deal with secrets in one form or another.
+        This includes connection information for databases and API keys.  
+
+      There are many ways applications acquire secrets.  The worst way is to hard-code them in 
+        plain text.  A better way is to access them from a secrets store that uses a secure
+        connection like TLS.
+
+
+    - Now, we can create the Dockerfile.  This will most likely require a lot of iterations and
+        fine-tuning.  
+
+        1. We need to choose a base image.  If an image for our application type like Jave is
+             available, we should use that.  Otherwise, we should use a Linux distro image.
+
+        2. We need to assemble sources using the COPY and ADD commands.
+
+        3. We need to build the application.
+
+             # Build application
+             RUN mvn --clean install
+
+             # Define environment variables
+             ENV foo=bar
+             ENV baz=123
+
+             # Open ports
+             EXPOSE 5000
+             EXPOSE 15672/tcp
+
+        4. We start the application.
+
+             # Start application
+             ENTRYPOINT java -jar pet-shop.war
+
+
+    - We might wonder what we gain by bothering to containerize our legacy app.  Studies
+        have shown we can cut our maintenance costs in half and our time to release by
+        90%.  
+
+
+
 - Sharing or Shipping Images
 
 - Tagging an Image
