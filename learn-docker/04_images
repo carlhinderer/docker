@@ -465,6 +465,69 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 - Multistep Builds
 
+    - In this example, we have a simple C program:
+
+        File: hello.c
+
+        #include <stdio.h>
+        int main (void)
+        {
+            printf ("Hello, world!\n");
+            return 0;
+        }
+
+
+    - Now, we'll write a Dockerfile to build and run our application.  Note that in this case,
+        we are copying all artifacts into the image.
+
+        File: Dockerfile
+
+        FROM alpine:3.7
+        RUN apk update && apk add --update alpine-sdk
+        RUN mkdir /app
+        WORKDIR /app
+        COPY . /app
+        RUN mkdir bin
+        RUN gcc -Wall hello.c -o bin/hello
+        CMD /app/bin/hello
+
+
+    - Now, we build the image:
+
+        # Build image
+        $ docker image build -t hello-world .
+
+        # See the new image
+        $ docker image ls | grep hello-world
+
+
+    - Instead of including all artifacts in the image, we can use a multistep Dockerfile.
+
+        File: Dockerfile
+
+        FROM alpine:3.7 AS build
+        RUN apk update && apk add --update alpine-sdk
+        RUN mkdir /app
+        WORKDIR /app
+        COPY . /app
+        RUN mkdir bin
+        RUN gcc hello.c -o bin/hello
+         
+        FROM alpine:3.7
+        COPY --from=build /app/bin/hello /app/hello
+        CMD /app/hello
+
+
+    - Note the difference in size between the images, since the 'hello-world-small' image
+        doesn't include the alpine-sdk, just the compiled binary of the first step.
+
+        $ docker image ls | grep hello-world
+
+        hello-world-small  latest   f98...   20 seconds ago   4.16MB
+        hello-world        latest   469...   10 minutes ago   176MB
+
+
+
 - Dockerfile Best Practices
 
 - Saving and Loading Images
