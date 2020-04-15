@@ -111,7 +111,7 @@ CHAPTER 3 - WORKING WITH CONTAINERS
         $ docker container stop quotes
 
         # Stop container by id
-        $ export CONTAINER_ID = $(docker container ls | grep quotes | awk '{print $1}')
+        $ export CONTAINER_ID=$(docker container ls | grep quotes | awk '{print $1}')
         $ docker container stop $CONTAINER_ID
 
 
@@ -129,7 +129,7 @@ CHAPTER 3 - WORKING WITH CONTAINERS
 
       # Remove a container
       $ docker container rm <container-id>
-      $ docker container rm <container-name>
+      $ dockder container rm <container-name>
 
       # Force remove
       $ docker container rm -f <container-id>
@@ -299,7 +299,7 @@ CHAPTER 3 - WORKING WITH CONTAINERS
 
 
 
-- Using a Container-Specific Loggging Driver
+- Using a Container-Specific Logging Driver
 
     - We have seen that the logging driver can be set globally in the Docker daemon config
         file.  We can also define the logging driver on a container-by-container basis.  

@@ -108,23 +108,23 @@ CHAPTER 1 - CONTAINERS
 - Container Architecture
 
     
-    -----------------------------------------------------
-    |                REST Interface
-    |
-    |                  DOCKER ENGINE
-    |
-    |   libcontainerd    libnetwork    graph    plugins
+    ------------------------------------------------------
+    |                REST Interface                      |
+    |                                                    |
+    |                  DOCKER ENGINE                     |
+    |                                                    |
+    |   libcontainerd    libnetwork    graph    plugins  |
     ------------------------------------------------------
 
     ----------------------
-    |   containerd
-    |      runc
+    |   containerd       |
+    |      runc          |
     ----------------------
 
-    --------------------------------------------------------------------------
-    |   Namespaces    Control Groups     Layer Capabilities    Other OS
-    |   (pid,net,ipc    (cgroups)        (Union filesystem)    Functionality
-    |    mnt,ufs)
-    |
-    |             LINUX OPERATING SYSTEM
-    --------------------------------------------------------------------------
+    ---------------------------------------------------------------------------
+    |   Namespaces    Control Groups     Layer Capabilities    Other OS       |
+    |   (pid,net,ipc    (cgroups)        (Union filesystem)    Functionality  |
+    |    mnt,ufs)                                                             |
+    |                                                                         |
+    |                    LINUX OPERATING SYSTEM                               |
+    ---------------------------------------------------------------------------
