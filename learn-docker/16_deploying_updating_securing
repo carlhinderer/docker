@@ -1,0 +1,30 @@
+--------------------------------------------------------------------------------
+CHAPTER 16 - DEPLOYING, UPDATING, & SECURING AN APPLICATION WITH KUBERNETES
+--------------------------------------------------------------------------------
+
+- Deploying a First Application
+
+    - Deploying the Web Component
+    - Deploying the Database
+    - Streamlining the Deployment
+
+
+- Defining Liveness and Readiness
+
+    - Kubernetes Liveness Probe
+    - Kubernetes Readiness Probe
+    - Kubernetes Startup Probe
+
+
+- Zero Downtime Deployments
+
+    - Rolling Updates
+    - Blue-Green Deployment
+
+
+- Kubernetes Secrets
+
+    - Manually Defining Secrets
+    - Creating Secrets with kubectl
+    - Using Secrets in a Pod
+    - Secret Values in Environment Variables

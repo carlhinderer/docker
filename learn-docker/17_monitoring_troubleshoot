@@ -1,0 +1,21 @@
+----------------------------------------------------------------------------
+CHAPTER 17 - MONITORING & TROUBLESHOOTING AN APP RUNNING IN PRODUCTION
+----------------------------------------------------------------------------
+
+- Monitoring an Individual Service
+
+    - Instrumenting a Node.js-Based Service
+    - Instrumenting a .NET Core-Based Service
+
+
+- Using Prometheus to Monitor a Distributed Application
+
+    - Architecture
+    - Deploying Prometheus to Kubernetes
+    - Deploying Our Application Services to Kubernetes
+    - Deploying Grafana to Kubernetes
+
+
+- Troubleshooting a Service Running in Production
+
+    - The netshoot Container

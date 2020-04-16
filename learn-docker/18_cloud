@@ -1,0 +1,24 @@
+-----------------------------------------------------------
+CHAPTER 18 - RUNNING A CONTAINERIZED APP IN THE CLOUD
+-----------------------------------------------------------
+
+- Deploying and Using Docker EE on AWS
+
+    - Provisioning the Infrastructure
+    - Installing Docker
+    - Installing Docker UCP
+    - Using Remote Admin for the UCP Cluster
+    - Deploying to Docker Swarm
+    - Deploying to Kubernetes
+
+
+- Exploring Azure Kubernetes Service (AKS)
+
+    - Perparing the Azure CLI
+    - Creating a Container Registry on Azure
+    - Pushing Our Images to ACR
+    - Creating a Kubernetes Cluster
+    - Deploying Our Application to the Kubernetes Cluster
+
+
+- Understanding GKE
