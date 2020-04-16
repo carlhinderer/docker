@@ -1,5 +1,5 @@
 -----------------------------------------------------------
-CHAPTER 5 - DATA VOLUMES & SYSTEM MANAGEMENT
+CHAPTER 5 - DATA VOLUMES & CONFIGURATION
 -----------------------------------------------------------
 
 - Creating and Mounting Data Volumes
@@ -79,6 +79,10 @@ CHAPTER 5 - DATA VOLUMES & SYSTEM MANAGEMENT
 
 
 - Mounting a Volume
+
+    - Now that we have created a named volume, 
+
+
 
 - Removing Volumes
 
