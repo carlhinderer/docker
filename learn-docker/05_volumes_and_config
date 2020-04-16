@@ -8,6 +8,7 @@ CHAPTER 5 - DATA VOLUMES & CONFIGURATION
         volumes.  Volumes have a life cycle that goes beyond the life cycle of containers.
 
 
+
 - Modifying the Container Layer
 
     - Before looking at volumes, we first discuss what happens if an application changes 
@@ -80,13 +81,84 @@ CHAPTER 5 - DATA VOLUMES & CONFIGURATION
 
 - Mounting a Volume
 
-    - Now that we have created a named volume, 
+    - Now that we have created a named volume, we can mount it into a container.
+
+        # Run container with volume mounted
+        $ docker container run --name test -it -v sample:/data alpine /bin/sh
+
+
+    - Now, inside the container, we can create files in the /data folder.
+
+        / # cd /data 
+        / # echo "Some data" > data.txt 
+        / # echo "Some more data" > data2.txt 
+        / # exit
+
+
+    - If we navigate to the folder where the volume was created, we should now see the new
+        data files.
+
+        # New data files are present
+        $ ls /var/lib/docker/volumes/sample/_data
+
+        # Print file in volume
+        $ cd /var/lib/docker/volumes/sample/_data
+        $ cat data.txt
+
+        # Add a new file to the volume
+        $ echo "This file was created on the host." > host-data.txt
+
+
+    - Now, we can mount the volume into a new container, and we'll be able to see all the files
+        in the volume.
+
+        # Create another container with the same volume mounted
+        $ docker container run --name test2 -it -v sample:/data centos:7 /bin/bash
+
+      And we can still see the files we have created:
+
+        / # cd /data
+        / # ls -l 
 
 
 
 - Removing Volumes
 
+    - Here, we delete the volume we previously created:
+
+        # Delete volume
+        $ docker volume rm sample
+
+        # Remove all running containers to clean up the system
+        $ docker container rm -f $(docker container ls -aq)
+
+
+
 - Sharing Data Between Containers
+
+    - As always when multiple applications or processes concurrently access data, we have to
+        be careful to avoid inconsistencies.  To avoid concurrency prolems like race conditions,
+        ideally we should only allow one process to write at a time, while others are read-only
+        for the duration of the write.
+
+      We can make a volume read-only for a given container to enforce this.
+
+
+        # Create a writer
+        $ docker container run -it --name writer -v shared-data:/data alpine /bin/sh
+
+        # Create a file in the container, should succeed
+        # / echo "I can create a file" > /data/sample.txt
+
+
+        # Create a reader
+        $ docker container run -it --name reader -v shared-data:/app/data:ro ubuntu:19.04 /bin/bash
+
+        # Try to create a file, should fail
+        # / echo "Try to break read/only" > /app/data/data.txt
+
+
+
 
 - Using Host Volumes
 
