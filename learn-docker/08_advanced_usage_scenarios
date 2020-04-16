@@ -1,0 +1,23 @@
+-----------------------------------------------------------
+CHAPTER 8 - ADVANCED DOCKER USAGE SCENARIOS
+-----------------------------------------------------------
+
+- All the Tips and Tricks of a Docker Pro
+
+    - Keeping Your Docker Environment Clean
+    - Running Docker in Docker
+    - Formatting the Output of Common Docker Commands
+    - Filtering the Output of Common Docker Commands
+    - Optimizing Your Build Process
+    - Limiting Resources Consumed by a Container
+    - Read-Only Filesystem
+    - Avoid Running a Containerized Application as Root
+
+
+- Running Your Terminal in a Remote Container and Accessing it via HTTPS
+
+
+- Running Your Development Environment Inside a Container
+
+
+- Running Your Code Editor in a Remote Container and Accessing it via HTTPS

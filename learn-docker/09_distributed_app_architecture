@@ -1,0 +1,36 @@
+-----------------------------------------------------------
+CHAPTER 9 - DISTRIBUTED APPLICATION ARCHITECTURE
+-----------------------------------------------------------
+
+- Understanding the Distributed Application Architecture
+
+    - Defining the Terminology
+
+
+- Patterns and Best Practices
+
+    - Loosely Coupled Components
+    - Stateful vs Stateless
+    - Service Discovery
+    - Routing
+    - Load Balancing
+    - Defensive Programming
+        - Retries
+        - Logging
+        - Error Handling       
+    - Redundancy
+    - Health Checks
+    - Circuit Breaker Pattern
+
+
+- Running in Production
+
+    - Logging
+    - Tracing
+    - Monitoring
+    - Application Updates
+        - Rolling Updates
+        - Blue-green Deployments
+        - Canary Releases
+        - Irreversible Data Changes
+        - Rollback

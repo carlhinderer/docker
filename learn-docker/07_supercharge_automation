@@ -1,0 +1,14 @@
+-----------------------------------------------------------
+CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
+-----------------------------------------------------------
+
+- Executing Simple Admin Tasks in a Container
+
+
+- Using Test Containers
+
+    - Integration Tests for a Node.js Application
+    - The Testcontainers Project
+
+
+- Using Docker to Power a CI/CD Pipeline
