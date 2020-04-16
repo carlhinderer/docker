@@ -2,12 +2,81 @@
 CHAPTER 5 - DATA VOLUMES & SYSTEM MANAGEMENT
 -----------------------------------------------------------
 
-
 - Creating and Mounting Data Volumes
+
+    - Containers are meant to be stateless.  One way to get around this is to use Docker 
+        volumes.  Volumes have a life cycle that goes beyond the life cycle of containers.
+
 
 - Modifying the Container Layer
 
+    - Before looking at volumes, we first discuss what happens if an application changes 
+        something in the filesystem of the container.  In this case, the changes are all
+        happening in the writable container layer.
+
+        # Write to the container filesystem
+        $ docker container run --name demo \
+            alpine /bin/sh -c 'echo "This is a test" > sample.txt'
+
+
+        # Now we can view the changes
+        $ docker container diff demo
+
+        A /sample.txt
+
+
+    - Now, when we remove the container from memory, the container layer will also be
+        removed, with all changes irreversibly deleted.
+
+
+
 - Creating Volumes
+
+    - First, we create a new volume.  The named volume can then be mounted into a container
+        and used for persistent data storage.  The default driver is the 'local' driver,
+        which stores the data locally in the host filesystem.
+
+        # Create new volume
+        $ docker volume create sample
+
+
+    - Now, we can find out where the data is being stored.
+
+        # Inspect new volume
+        $ docker volume inspect sample
+
+        [
+            {
+                "CreatedAt": "2020-04-15T22:06:52-06:00",
+                "Driver": "local",
+                "Labels": {},
+                "Mountpoint": "/var/lib/docker/volumes/sample/_data",
+                "Name": "sample",
+                "Options": {},
+                "Scope": "local"
+            }
+        ]
+
+
+    - Since the volume is in a protected part of the filesystem, we'll need to add the 
+        --privileged flag to the container.
+
+        # --privileged allows access to the devices of the host
+        # --pid=host allows container to access process tree of host
+
+        $ docker run -it --rm --privileged --pid=host fundamentalsofdocker/nsenter
+
+
+    - And we can access the mount point from inside the container:
+
+        / # cd /var/lib/docker/volumes/sample/_data
+        / # ls -l
+
+
+    - There are many other volume drivers available from third parties, in the form of plugins.
+        Volume drivers include cloud storage, NFS drives, software-defined storage, and more.
+
+
 
 - Mounting a Volume
 
