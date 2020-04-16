@@ -2,4 +2,34 @@
 CHAPTER 12 - ORCHESTRATORS
 -----------------------------------------------------------
 
-- 
+- What are Orchestrators and Why Do We Need Them?
+
+
+- The Tasks of an Orchestrator
+
+    - Reconciling the Desired State
+    - Replicated and Global Services
+    - Service Discovery
+    - Routing
+    - Load Balancing
+    - Scaling
+    - Self-Healing
+    - Zero Downtime Deployments
+    - Affinity and Location Awareness
+    - Security
+         - Secure Communication and Cryptographic Node Identity
+         - Secure Networks and Network Policies
+         - RBAC
+         - Secrets
+         - Content Trust
+         - Revese Uptime
+    - Introspection
+
+
+- Overview of Popular Orchestrators
+
+    - Kubernetes
+    - Docker Swarm
+    - Apache Mesos and Marathon
+    - Amazon ECS
+    - Microsoft ACS

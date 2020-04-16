@@ -1,0 +1,41 @@
+-----------------------------------------------------------
+CHAPTER 15 - INTRO TO KUBERNETES
+-----------------------------------------------------------
+
+- Kubernetes Architecture
+
+
+- Kubernetes Master Nodes
+
+
+- Cluster Nodes
+
+
+- Introduction to Minikube
+
+
+- Introduction to Pods
+
+    - Comparing Docker Container and Kubernetes Pod Networking
+    - Sharing the Network Namespace
+    - Pod Life Cycle
+    - Pod Specifications
+    - Pods and Volumes
+
+
+- Kubernetes ReplicaSet
+
+    - ReplicaSet Specification
+    - Self-Healing
+
+
+- Kubernetes Deployment
+
+
+- Kubernetes Service
+
+
+- Context-Based Routing
+
+
+- Comparing SwarmKit with Kubernetes

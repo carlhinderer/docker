@@ -1,0 +1,42 @@
+-----------------------------------------------------------
+CHAPTER 13 - INTRO TO DOCKER SWARM
+-----------------------------------------------------------
+
+- The Docker Swarm Architecture
+
+
+- Swarm Nodes
+
+    - Swarm Managers
+    - Swarm Workers
+
+
+- Stacks, Services, & Tasks
+
+    - Stacks
+    - Services
+    - Tasks
+
+
+- Multi-Host Networking
+
+
+- Creating a Docker Swarm
+
+    - Creating a Local Single Node Swarm
+    - Creaging a Local Swarm in VirtualBox or Hyper-V
+    - Using Play with Docker to Generate a Swarm
+    - Creating a Docker Swarm in the Cloud
+
+
+- Deploying a First Application
+
+    - Creating a Service
+    - Inspecing the Service and its Tasks
+    - Logs of a Service
+    - Reconciling the Desired State
+    - Deleting a Service or a Stack
+    - Deploying a Multi-Service Stack
+
+
+- The Swarm Routing Mesh
