@@ -1,0 +1,20 @@
+-----------------------------------------------------------
+CHAPTER 11 - DOCKER COMPOSE
+-----------------------------------------------------------
+
+- Declarative vs Imperative
+
+
+- Running a Multi-Service App
+
+    - Building Images with Docker Compose
+    - Running an Application with Docker Compose
+
+
+- Scaling a Service
+
+
+- Building and Pushing an Application
+
+
+- Using Docker Compose Overrides

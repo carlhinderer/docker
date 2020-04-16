@@ -1,0 +1,30 @@
+-----------------------------------------------------------
+CHAPTER 10 - SINGLE-HOST NETWORKING
+-----------------------------------------------------------
+
+- The Container Network Model
+
+
+- Network Firewalling
+
+
+- Working with the Bridge Network
+
+
+- The host and null Network
+
+    - The host Network
+    - The null Network
+
+
+- Running in an Existing Network Namespace
+
+
+- Managing Container Ports
+
+
+- HTTP-Level Routing Using a Reverse Proxy
+
+    - Containerizing the Monolith
+    - Extracting the First Microservice
+    - Using Traefik to Route Traffic
