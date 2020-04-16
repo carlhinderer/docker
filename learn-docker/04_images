@@ -675,10 +675,87 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
 - Sharing or Shipping Images
 
+    - In order to ship our custom image to other environments, we need to:
+
+        1. Give it a globally unique name (tag the image)
+        2. Publish the image to an image registry
+
+
+
 - Tagging an Image
+
+    - Each image has a tag.  It is used to version images, and it has a broader reach than
+        just being a version number.
+
+        # Get alpine:latest
+        $ docker image pull alpine
+
+        # Get an older version
+        $ docker image pull alpine:3.5
+
+
 
 - Image Namespaces
 
+    - So far, we haven't thought too much about where we are pulling images from.  Our docker
+        environment is configured so that all images are pulled from DockerHub by default.
+        We pulled official images like 'alpine' or 'busybox'.
+
+
+    - Now, we will learn about how images are namespaced.  The fully qualified image name 
+        looks like:
+
+        <registry URL>/<User or Org>/<name>:<tag>
+
+
+        <registry URL>
+          Is 'docker.io' by default, but there are also popular registries at Google, AWS, 
+            Azure, Red Hat, and Artifactory.  If omitted, Docker Hub is chosen.
+
+        <User or Org>
+          Private ID of individual or organization defined on DockerHub or other registry.
+            If the image is an 'official image' on Docker Hub, no user or organization
+            namespace is needed.
+
+        <name>
+          This the name of the image.
+
+        <tag>
+          This is the tag of the image.  If it is omitted, 'latest' is used.
+
+
+
 - Official Images
 
+    - Official repositories are repositories hosted on Docker Hub that are curated by 
+        organizations that are also responsible for the software packaged in the image.
+
+      Official images are meant to provide base OS repose, images for programming language
+        runtimes, frequently used data storage, and other important services.
+
+
+
 - Pushing Images to a Registry
+
+    - Eventually, we will want to ship our images to a target environment, such as test, QA, or
+        a production system.  We usually use a container registry for this.  
+
+      Docker Hub is the most popular registry.  A personal account like 'jsmith' is fine for
+        personal projects, while an organization would want to have an account like 'acme'.
+
+
+    - Let's say we want to push the latest version of alpine to our account and give it a version
+        number 1.0.
+
+        # Tag the image
+        $ docker image tag alpine:latest gnschenker/alpine:1.0
+
+        # Log into Docker Hub account
+        $ docker login -u jsmith -p <my secret pw>
+
+        # Push the image
+        $ docker image push jsmith/alpine:1.0
+
+
+    - For each image we push, we automatically create a repository, which can be public or 
+        private.
