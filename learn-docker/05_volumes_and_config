@@ -159,8 +159,69 @@ CHAPTER 5 - DATA VOLUMES & CONFIGURATION
 
 
 
-
 - Using Host Volumes
+
+    - Sometimes, often because your legacy application needs access to some folder, it is useful 
+        to map a volume directly to a specific host folder.
+
+
+    - Here, we mount a subdirectory of our current working directory into the container at 
+        /app/src.
+
+        # Mount subdirectory of current working directory
+        $ docker container run --rm -it -v $(pwd)/src:/app/src alpine:latest /bin/sh
+
+
+    - Developers tend to use this trick often when working on applications running in containers
+        to make sure their most recent code changes are reflected, without the need to rebuild
+        and rerun the container after each change.
+
+
+    - For example, say we want to create a simple static website using nginx as our web server:
+
+        1. First, create a new folder for the host where we will put our web assets.
+
+             $ mkdir ~/my-web
+             $ cd ~/my-web
+
+        2. Next, create a simple web page.
+
+             $ echo "<h1>Personal Website</h1>" > index.html
+
+        3. Add a Dockerfile that will contain instructions on how to build the image containing
+             our sample website.
+
+             # Dockerfile
+             FROM nginx:alpine
+             COPY . /usr/share/nginx/html
+
+        4. Build the image.
+
+             $ docker image build -t my-website:1.0 .
+
+        5. Run a container from the image.  Then, navigate to http://localhost:8080 to see the
+             web page.
+
+             $ docker container run -d --name my-site -p 8080:80 my-website:1.0
+
+        6. Now, edit the index.html file.
+
+             # Add this to index.html
+             <p>This is some text.</p>
+
+        7. If we save it and reload, our changes are unfortunately not reflected.  Host-mounted
+             volumes can be used to solve this problem:
+
+             $ docker container rm -f my-site
+             $ docker container run -d \
+                                    --name my-site \
+                                    -v $(pwd):/usr/share/nginx/html \
+                                    -p 8080:80 \
+                                    my-website:1.0
+
+           Now, if we make changes and reload, our changes will be reflected.
+
+
 
 - Defining Volumes in Images
 
