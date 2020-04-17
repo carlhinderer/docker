@@ -101,8 +101,74 @@ CHAPTER 6 - DEBUGGING CODE RUNNING IN CONTAINERS
             Application listening at 0.0.0.0:3000
 
 
+        9. Now, stop the container.  Add a new endpoint to the 'index.js' file.
+
+            # Add to index.js
+
+            const hobbies = [
+              'Swimming', 'Diving', 'Jogging', 'Cooking', 'Singing'
+            ];
+            
+            app.get('/hobbies', (req,res)=>{
+              res.send(hobbies);
+            })
+
+
+        10. Create a new version of the container image:
+
+             $ docker image build -t sample-app .
+
+
+            And re-run the container from the new image:
+
+             $ docker container run --rm -it \
+                                    --name my-sample-app \
+                                    -p 3000:3000 \
+                                    sample-app
+
+
 
 - Mounting Evolving Code Into the Running Container
+
+    - Here, we mount a host folder, /projects/sample-app, into a container at /app
+
+        # Mount host folder to container
+        $ docker container run --rm -it \
+                                 --volume /projects/sample-app:/app \
+                                 alpine /bin/sh
+
+
+        # Mount the current working directory to container
+        $ docker container run --rm -it \
+                               --volume $(pwd):/app \
+                               -p 3000:3000 \
+
+
+    - Now, we can test to see if it works:
+
+        1. Add new changes to 'index.js'.
+
+             # Add to index.js
+
+             app.get('/status', (req,res)=>{
+               res.send('OK');
+             })
+
+
+        2. Run the container again, without rebuilding the image.
+
+             # docker container run --rm -it \
+                                    --name my-sample-app \
+                                    --volume $(pwd):/app \
+                                    -p 3000:3000 \
+                                    sample-app
+
+
+        3. Verify that the new changes are there.
+
+             $ curl localhost:3000/status
+             OK
+
 
 
 - Auto Restarting Code Upon Changes
