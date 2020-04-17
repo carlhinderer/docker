@@ -173,9 +173,42 @@ CHAPTER 6 - DEBUGGING CODE RUNNING IN CONTAINERS
 
 - Auto Restarting Code Upon Changes
 
-    - Auto-restarting for Node.js
-    - Auto-restarting for Python
-    - Auto-restartign for .NET
+    - We have reduced a lot of friction by not having to rebuild the image each time we make
+        a change, but we still have to stop and restart the container to reflect a change,
+        since the running application doesn't know to restart.
+
+      We can further reduce friction by automatically restarting the application when changes
+        are made.
+
+
+
+- Auto-restarting for Node.js
+
+    - 'nodemon' is a popular tool for automatically restarting Node.js applications.
+
+        $ npm install -g nodemon
+
+
+    - Now, add a new route to index.js
+
+        app.get('/colors', (req,res)=>{
+         res.send(['red','green','blue']);
+        })
+
+
+    - In the console, we should see the application restarting automatically.  
+
+        # Changes are reflected
+        $ curl localhost:3000/colors
+        ["red","green","blue"]
+
+
+    - Now, we want to use nodemon in a container.  
+
+
+
+- Auto-restarting for Python
+- Auto-restartign for .NET
 
 
 - Line-by-line Code Debugging in a Container
