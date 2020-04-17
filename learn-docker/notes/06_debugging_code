@@ -203,12 +203,38 @@ CHAPTER 6 - DEBUGGING CODE RUNNING IN CONTAINERS
         ["red","green","blue"]
 
 
-    - Now, we want to use nodemon in a container.  
+    - Now, we want to use nodemon in a container.  Since we'll be running the 'nodemon' 
+        command to start the application instead of 'node index.js', we'll need to 
+        create a new Dockerfile.
+
+        # File: Dockerfile-dev
+
+        FROM node:latest          
+        RUN npm install -g nodemon
+        WORKDIR /app
+        COPY package.json ./
+        RUN npm install
+        COPY . .
+        CMD nodemon
+
+
+    - Now, we can build our development image:
+
+        $ docker image build -t sample-app-dev .
+
+      And run the container:
+
+        $ docker container run --rm -it \
+                               -v $(pwd):/app \
+                               -p 3000:3000 \
+                               sample-app-dev
 
 
 
 - Auto-restarting for Python
-- Auto-restartign for .NET
+
+    - 
+
 
 
 - Line-by-line Code Debugging in a Container
