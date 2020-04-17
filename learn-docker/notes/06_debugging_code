@@ -253,6 +253,36 @@ CHAPTER 6 - DEBUGGING CODE RUNNING IN CONTAINERS
           app.run()
 
 
+    - Add a requirements.txt and install packages.
+
+        # File: requirements.txt
+        flask
+
+        # Install packages
+        $ pip install -r requirements.txt
+
+
+    - We can use nodemon to auto-reload Python applications also.
+
+        $ nodemon main.py
+
+
+    - Now, we can make some changes.
+
+        # Add to main.py
+        from flask import jsonify
+ 
+        @app.route("/colors")
+        def colors():
+            return jsonify(["red", "green", "blue"])
+
+
+      And we can test to see that the changes have been reflected without having to manually 
+        restart the application.
+
+        $ curl localhost:5000/colors
+
+
 
 - Line-by-line Code Debugging in a Container
 
