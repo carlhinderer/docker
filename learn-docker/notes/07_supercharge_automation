@@ -203,6 +203,39 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
 
 
+- Integration Testing a Node.js Application - Testing the API
+
+    1. Start the test project.
+
+        $ cd tests
+        $ npm init
+
+
+    2. Install and initialize jasmine.
+
+        # Install jasmine
+        $ npm install --save-dev jasmine
+
+        # Initialize jasmine for project
+        $ node node_modules/jasmine/bin/jasmine init
+
+
+    3. Now, create the config settings for the 'jasmine.json' file if one wasn't created
+         automatically.
+
+        # File: /spec/support/jasmine.json
+
+        {
+          "spec_dir": "spec",
+          "spec_files": [
+            "**/*[sS]pec.js"
+          ],
+          "stopSpecOnExpectationFailure": false,
+          "random": false
+        }
+
+
+
 - The Testcontainers Project
 
 
