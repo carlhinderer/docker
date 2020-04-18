@@ -286,14 +286,91 @@ CHAPTER 6 - DEBUGGING CODE RUNNING IN CONTAINERS
 
 - Line-by-line Code Debugging in a Container
 
-    - Debugging a Node.js Application
-    - Debugging a .NET  Application
+    - Note that line-by-line debugging inside a container should be a last resort, when 
+        you are trying to figure out what is going on.
+
+      Ideally, you would have unit and integration tests already running in a container,
+        which would catch most bugs and preclude the need for debugging.
+
 
 
 - Instrumenting Your Code to Produce Meaningful Logging Information
 
-    - Instrumenting a Python Application
-    - Instrumenting a .NET Application
+    - Once an application is running in production, it is impossible to interactively debug.
+        The best way to figure out why problems are happening is with detailed logging
+        information.  
+
+
+    - Most log messages are organized by severity level.  Here are the common ones:
+
+         Security levels     Explanation
+         ---------------------------------------------------------------------------------------
+         TRACE               Very fine-grained information. At this level, you are looking 
+                               at capturing every detail possible about your application's 
+                               behavior.
+
+         DEBUG               Relatively granular and mostly diagnostic information helping to 
+                               pin down potential problems if they occur.
+
+         INFO                Normal application behavior or milestones.
+
+         WARN                The application might have encountered a problem or you detected 
+                               an unusual situation.
+
+         ERROR               The application encountered a serious issue. This most probably 
+                               represents the failure of an important application task.
+
+         FATAL               The catastrophic failure of your application. The immediate shutdown 
+                               of the application is advised.
+
+
+    - Most logging libraries allow a developer to develop different log sinks (destinations for
+        log messages).  Popular sinks include file sinks or streaming to the console.
+
+      When working with containerized applications, it is recommended to always direct logging
+        output to STDOUT.  Docker will then make this information available via the 
+        'docker container logs' command.
+
+
+
+- Instrumenting a Python Application
+
+    - First, add this code to the top of main.py:
+
+        # Add above other code in main.py
+
+        import logging
+
+        logger = logging.getLogger("Sample App")
+        logger.setLevel(logging.WARN)
+
+        # Create a console handler (StreamHandler outputs to STDOUT)
+        ch = logging.StreamHandler()
+
+        # Create a formatter and add it to the handlers
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+
+
+    - Now, we can add a logging message to the 'hello()' function.  Since we set the log level 
+        to WARN, our info messages will not be displayed in the console.
+
+        # Add INFO-level message
+        @app.route("/")
+        def hello():
+            logger.info("Accessing endpoint '/'")
+            return "Hello World!"
+
+
+    - If we add a WARN-level message, the log message will be output to the console.
+
+        # Add WARN-level message
+        @app.route("/colors")
+        def colors():
+            logger.warning("Warning, you are accessing /colors")
+            return jsonify(["red", "green", "blue", "orange"])
+
 
 
 - Using Jaeger to Monitor and Troubleshoot
