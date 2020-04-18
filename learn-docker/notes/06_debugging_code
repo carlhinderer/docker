@@ -374,3 +374,17 @@ CHAPTER 6 - DEBUGGING CODE RUNNING IN CONTAINERS
 
 
 - Using Jaeger to Monitor and Troubleshoot
+
+    - When we want to monitor and troubleshoot transactions in a complex distributed system,
+        we need something a bit more powerful.  
+
+      Preferably, we need the capability to trace a single request or transaction end-to-end,
+        as it flows through the system composed of many services.  Ideally, we would want to
+        capture other interesting metrics, like the total time for the request, also.
+
+
+    - When using Jaeger, you run a central Jaeger server component and each application 
+        component uses a Jaeger client that will forward debug and tracing information to the
+        Jaeger server.  
+
+      There are Jaeger clients for all major programming languages and frameworks.
