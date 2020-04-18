@@ -235,6 +235,54 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
         }
 
 
+    4. Install the 'request' library so that we can make API calls to the SUT.
+
+        $ npm install request --save-dev
+
+
+    5. Add an 'api-spec.js' file to the 'spec' subfolder of the project.
+
+        # File: tests/spec/api-spec.js
+
+        var request = require("request");
+
+        const base_url = process.env.BASE_URL || 'http://localhost:3000';
+
+        describe("API test suite", () => {
+            describe("GET /", () => {
+                it("returns status code 200", function(done) {
+                    request.get(base_url, (error, response, body) => {
+                        expect(response.statusCode).toBe(200);
+                        done();
+                    });
+                });
+                it("returns description", function(done) {
+                    request.get(base_url, (error, response, body) => {
+                        expect(body).toBe("Sample API");
+                        done();
+                    });
+                });
+            });
+        });
+
+
+    6. Now, we have to edit the 'package.json' to change the test command to 'jasmine'.
+
+        # File: package.json
+
+        "scripts": {
+            "test": "jasmine"
+        },
+
+
+    7. Now, we can run the tests and they should pass.
+
+        $ npm test
+
+
+    8. Now, to clean up, we can stop the api and remove the Postgres container.  
+    
+
 
 - The Testcontainers Project
 
