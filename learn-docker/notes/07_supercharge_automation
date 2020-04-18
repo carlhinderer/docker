@@ -56,8 +56,63 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
 - Using Test Containers
 
-    - Integration Tests for a Node.js Application
-    - The Testcontainers Project
+    - Typical Test Types:
+
+        1. Unit Tests
+             Assert the correctness and quality of an individual, isolated piece of the 
+               overall application.  
+
+        2. Integration Tests
+             Makes sure that pieces that are closely related work together as expected.
+
+        3. Stress and Load Tests
+             Tests the behavior of the application when handling lots of current requests
+               and large amounts of data.
+
+        4. End-to-End Tests
+             Simulate a real user working with the application.
+
+
+    - The code or component under test is often called a SUT (System Under Test).
+
+      Unit tests are tightly coupled to the actual code, so they live in the same container
+        as the SUT.  Integration, stress/load, and end-to-end tests use the public interface
+        of the application, so they often run from a separate container.
+
+
+    - End-to-end tests often use the Selenium web driver to automate actions on a given web
+        page.
+
+
+
+- Integration Testing a Node.js Application
+
+    1. Make a folder and subfolders for our application.  The subfolders are 'tests', 'api',
+         and 'database'.
+
+        $ mkdir ~/fod/ch07/integration-test-node && cd ~/fod/ch07/integration-test-node
+        $ mkdir tests api database
+
+
+    2. Create the script to initialize the database.  We will use it to create the Postgres
+         database.
+
+        # File: integration-test-node/database/init-script.sql
+
+        CREATE TABLE hobbies(
+           hobby_id serial PRIMARY KEY,
+           hobby VARCHAR (255) UNIQUE NOT NULL
+        );
+        
+        insert into hobbies(hobby) values('swimming');
+        insert into hobbies(hobby) values('diving');
+        insert into hobbies(hobby) values('jogging');
+        insert into hobbies(hobby) values('dancing');
+        insert into hobbies(hobby) values('cooking');
+
+
+
+- The Testcontainers Project
 
 
 - Using Docker to Power a CI/CD Pipeline
