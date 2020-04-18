@@ -85,7 +85,7 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
 
 
-- Integration Testing a Node.js Application
+- Integration Testing a Node.js Application - Preparing the Database
 
     1. Make a folder and subfolders for our application.  The subfolders are 'tests', 'api',
          and 'database'.
@@ -109,6 +109,48 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
         insert into hobbies(hobby) values('jogging');
         insert into hobbies(hobby) values('dancing');
         insert into hobbies(hobby) values('cooking');
+
+
+    3. Create a volume where the database will store it's files.
+
+        $ docker volume create pg-data
+
+
+    4. Run the database container.
+
+        $ docker container run -d \
+                               --name postgres \
+                               -p 5432:5432 \
+                               -v $(pwd)/database:/docker-entrypoint-initdb.d \
+                               -v pg-data:/var/lib/postgresql/data \
+                               -e POSTGRES_USER=dbuser \
+                               -e POSTGRES_DB=sample-db \
+                               postgres:11.5-alpine
+
+
+    5. Verify that the new container is running.  We will see that the initialization
+         script was run.
+
+         $ docker container logs postgres
+
+         ...
+         server started
+         CREATE DATABASE
+         
+         /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/init-db.sql
+         CREATE TABLE
+         INSERT 0 1
+         INSERT 0 1
+         INSERT 0 1
+         INSERT 0 1
+         INSERT 0 1
+         
+         ...
+         
+         PostgreSQL init process complete; ready for start up.
+         
+         2019-09-07 17:22:30.056 UTC [1] LOG: listening on IPv4 address "0.0.0.0", port 5432
+         ...
 
 
 
