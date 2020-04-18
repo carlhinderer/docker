@@ -4,6 +4,55 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
 - Executing Simple Admin Tasks in a Container
 
+    - Let's assume we have a handy Perl script to strip all whitespace from a file.
+
+        $ cat sample.txt | perl -lpe 's/^\s*//'
+
+
+    - The only problem is that we don't have Perl installed on our machine.  But, we can
+        use Docker to circumvent the need to install it.
+
+        1. Create a new folder
+
+             $ mkdir -p ~/fod/ch07/simple-task && cd ~/fod/ch07/simple-task
+
+
+        2. Create a sample file in the new folder
+
+             # File: sample.txt
+
+             1234567890
+               This is some text
+                another line of text
+              more text
+                  final line
+
+
+        3. Now, we can run a container with Perl installed in it.  We use the slim version
+             of the official Perl image.
+
+           We map the current working directory on our host to /usr/src/app in the container,
+             and set /usr/src/app to be the container's working directory.
+
+
+             # Run Perl script on our files without installing Perl
+             $ docker container run --rm -it \
+                                    -v $(pwd):/usr/src/app \
+                                    -w /usr/src/app \
+                                    perl:slim sh -c "cat sample.txt | perl -lpe 's/^\s*//'"
+
+
+    - Note that we could even use some older version of Perl if we needed to.  
+
+        perl:some-old-version
+
+
+    - On hosts that don't have Python 3 installed, we can use this same technique to run
+        Python 3 scripts.
+
+        python:3.7.4-alpine python stats.py sample.txt
+
+
 
 - Using Test Containers
 
