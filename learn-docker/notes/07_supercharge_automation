@@ -177,6 +177,31 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
         $ npm install express --save
 
 
+    4. Create a 'server.js' file in the 'api' folder.
+
+        # File: api/server.js
+
+        const express = require('express');
+        const app = express();
+
+        app.listen(3000, '0.0.0.0', () => {
+            console.log('Application listening at 0.0.0.0:3000');
+        })
+
+        app.get('/', (req, res) => {
+            res.send('Sample API');
+        })
+
+
+    5. Start the app and test the home endpoint.
+
+        # Start the app
+        $ npm start
+
+        # Test the home endpoint
+        $ curl localhost:3000
+
+
 
 - The Testcontainers Project
 
