@@ -280,8 +280,24 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
         $ npm test
 
 
-    8. Now, to clean up, we can stop the api and remove the Postgres container.  
-    
+    8. Now, to clean up, we can stop the api and remove the Postgres container.
+
+
+
+- Integration Testing a Node.js Application - Run Everything in Containers
+
+    1. First, we'll add a Dockerfile for the API.
+
+        # File: api/Dockerfile
+
+        FROM node:alpine
+        WORKDIR /usr/src/app
+        COPY package.json ./
+        RUN npm install
+        COPY . .
+        EXPOSE 3000
+        CMD npm start
+
 
 
 - The Testcontainers Project
