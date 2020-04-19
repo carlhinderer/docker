@@ -299,6 +299,18 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
         CMD npm start
 
 
+    2. Next, add a Dockerfile for the tests.
+
+        # File tests/Dockerfile
+
+        FROM node:alpine
+        WORKDIR /usr/src/app
+        COPY package.json ./
+        RUN npm install
+        COPY . .
+        CMD npm test
+
+
 
 - The Testcontainers Project
 
