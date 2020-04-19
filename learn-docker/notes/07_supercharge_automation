@@ -345,8 +345,31 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
              tests-node
 
 
+    4. Make the script executable.
+
+         $ chmod +x ./test.sh
+
+
+    5. Now, we can run it.
+
+         $ ./test.sh
+
+
+    6. After running it, we can run a cleanup script.
+
+         # File: integration-test-node/cleanup.sh
+         docker container rm -f postgres api
+         docker network rm test-net
+         docker volume rm pg-data
+
+         # Make script executable and run it
+         $ chmod +x cleanup.sh
+         $ ./test.sh
+
+
 
 - The Testcontainers Project
+
 
 
 - Using Docker to Power a CI/CD Pipeline
