@@ -370,6 +370,50 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
 - The Testcontainers Project
 
+    - Testcontainers is a useful project for Java developers.  
+
+      It is a Java library that supports JUnit tests, throwaway instances of common 
+        databases, Selenium web browsers, or anything else that can run in a Docker container.
 
 
-- Using Docker to Power a CI/CD Pipeline
+
+- Using Docker to Power a CI/CD Pipeline - Jenkins Basics
+
+    - In this example, we use Jenkins as our automation server to build a CI/CD pipeline.  
+        Other automation servers such as TeamCity work equally well.  
+
+      When using Jenkins, the central document is the 'Jenkinsfile', which will contain the
+        definition of our pipeline with its multiple stages.
+
+
+    - A simple Jenkinsfile with the 'Build', 'Test', 'Deploy to Staging', and 'Deploy to 
+        Production' stages might look like this:
+
+        pipeline {
+            agent any
+            options {
+                skipStagesAfterUnstable()
+            }
+            stages {
+                stage('Build') {
+                    steps {
+                        echo 'Building'
+                    }
+                }
+                stage('Test') {
+                    steps {
+                        echo 'Testing'
+                    }
+                }
+                stage('Deploy to Staging') {
+                    steps {
+                        echo 'Deploying to Staging'
+                    }
+                }
+                stage('Deploy to Production') {
+                    steps {
+                        echo 'Deploying to Production'
+                    }
+                }
+            }
+        }
