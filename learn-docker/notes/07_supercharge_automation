@@ -478,3 +478,30 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
 
     7. Now, click 'Build Now' for the new pipeline in the main Jenkins menu.
+
+
+
+- Using Docker to Power a CI/CD Pipeline - Integrating the Sample Application
+
+    1. Initialize our project folder as a Git project.
+
+         $ cd jenkins-pipeline && git init
+
+
+    2. Add a 'package.json' file to the folder.
+
+         {
+           "name": "jenkins-pipeline",
+           "version": "1.0.0",
+           "main": "server.js",
+           "scripts": {
+             "start": "node server.js",
+             "test": "jasmine"
+           },
+           "dependencies": {
+             "express": "^4.17.1"
+           },
+           "devDependencies": {
+             "jasmine": "^3.4.0"
+           }
+         }
