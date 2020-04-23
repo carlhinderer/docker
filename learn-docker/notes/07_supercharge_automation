@@ -795,3 +795,37 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
             --rm \
             --net test-net \
             gnschenker/node-docker sh -c "curl api:3000"
+
+
+    - Finally, we'll add a 'Cleanup' step.
+
+        stage('Cleanup') {
+            steps{
+                sh './jenkins/scripts/cleanup.sh'
+            }
+        }
+
+
+      Here is that script:
+
+        # File: jenkins-pipeline/jenkins/scripts/cleanup.sh
+
+        #!/usr/bin/env sh
+        docker rm -f api
+        docker network rm test-net
+
+
+    - Our final steps are:
+
+        1. Checkout From Source Control
+        2. Build
+        3. Test
+        4. Build and Push Docker Image
+        5. Deploy and Smoke Test
+        6. Cleanup
+
+
+    - Now, we can commit our changes.
+
+        $ git add --all && git commit -m "Defined code based pipeline"
+        $ git push origin master
