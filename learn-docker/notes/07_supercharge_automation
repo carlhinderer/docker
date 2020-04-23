@@ -677,3 +677,69 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
                 }
             }
         }
+
+
+    - Going through this script piece by piece, here we define 2 environment variables 
+        that will be available for all stages.
+
+        environment {
+            registry = "gnschenker/jenkins-docker-test"
+            DOCKER_PWD = credentials('docker-login-pwd')
+        }
+
+      The 'registry' variable contains the full name of the image we will eventually produce
+        and push to Docker Hub.
+
+      The 'DOCKER_PWD' variable is the password to our Docker Hub account.  We are using the
+        Jenkins 'credentials' function, which gives us access to a secret stored under the
+        name 'docker-login-pwd' in Jenkins.
+
+
+    - Next, we define the agent we want to run the Jenkins pipeline on.  In our case, we are
+        using a Docker image, the 'gnschenker/node-docker' image.
+
+      This image is based on 'node:12.10-alpine', with docker and curl installed.
+
+        agent {
+            docker {
+                image 'gnschenker/node-docker'
+                args '-v /var/run/docker.sock:/var/run/docker.sock'
+            }
+        }
+
+
+    - Here, we build and test our application:
+
+        stage("Build"){
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage("Test"){
+            steps {
+                sh 'npm test'
+            }
+        }
+
+
+    - In our 'Build & Push Docker image' stage, after we have successfully built and tested 
+        our application, we can create a Docker image for it and push it to a registry.
+
+        stage("Build & Push Docker image") {
+            steps {
+                sh 'docker image build -t $registry:$BUILD_NUMBER .'
+                sh 'docker login -u gnschenker -p $DOCKER_PWD'
+                sh 'docker image push $registry:$BUILD_NUMBER'
+                sh "docker image rm $registry:$BUILD_NUMBER"
+            }
+        }
+
+        1. We use Docker to build the image.  The $BUILD_NUMBER variable is defined by Jenkins.
+        2. We lock into Docker Hub.
+        3. We push the image to Docker Hub.
+        4. We remove the local copy of the image to save space, since it's in the registry now.
+
+
+    - Remember that all build stages happen inside of our 'gnschenker/node-docker' builder
+        container.  So, we're running Docker inside Docker.  This is why we mapped the Docker
+        socket into the builder.
