@@ -505,3 +505,21 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
              "jasmine": "^3.4.0"
            }
          }
+
+
+    3. Add a 'hobbies.js' file, which implements logic to retrieve hobbies as a JavaScript 
+         modules called 'hobbies'.
+
+         # File: hobbies.js
+
+         const hobbies = ["jogging","cooking","diving","swimming","reading"];
+
+         exports.getHobbies = () => {
+             return hobbies;
+         }
+         
+         exports.getHobby = id => {
+             if(id<1 || id > hobbies.length)
+                 return null;
+             return hobbies[id-1];
+         }
