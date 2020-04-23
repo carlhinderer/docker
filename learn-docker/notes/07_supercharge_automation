@@ -560,3 +560,36 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
              }
              res.send();
          })
+
+
+    5. Now, create a 'spec' subfolder and add some unit tests.
+
+         # File: spec/hobbies-spec.js
+
+         const hobbies = require('../hobbies');
+
+         describe("API unit test suite", () => {
+             describe("getHobbies", () => {
+                 const list = hobbies.getHobbies();
+                 it("returns 5 hobbies", () => {
+                     expect(list.length).toEqual(5);
+                 });
+                 it("returns 'jogging' as first hobby", () => {
+                     expect(list[0]).toBe("jogging");
+                 });
+             })
+         })
+
+
+    6. Add a 'spec/support' folder and add a Jasmine config file.
+
+         # File: spec/support/jasmine.json
+
+         {
+             "spec_dir": "spec",
+             "spec_files": [
+               "**/*[sS]pec.js"
+             ],
+             "stopSpecOnExpectationFailure": false,
+             "random": false
+         }
