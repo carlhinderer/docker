@@ -593,3 +593,40 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
              "stopSpecOnExpectationFailure": false,
              "random": false
          }
+
+
+
+- Using Docker to Power a CI/CD Pipeline - Pulling From Github
+
+    1. Commit the code created locally.
+
+         $ git add -A && git commit -m "First commit"
+
+
+    2. Add a .gitignore file to avoid pushing the node_modules folder to Github.
+
+         # File: .gitignore
+
+         node_modules
+
+
+    3. Log into your account on GitHub and create a new repository called 'jenkins-pipeline'.
+
+       After the repo has been created, execute these commands:
+
+           $ git remote add origin https://github.com/gnschenker/jenkins-pipeline.git
+           $ git push -u origin master
+
+
+    4. Now, we need to go into Jenkins and modify the configuration for the account.
+
+         Main Menu > Configure > Pipeline
+
+           SCM:  Git
+           Repository URL:  /home/fod/ch07/jenkins-pipeline
+           Credentials:  None
+           Branches to Build:  */master
+           Script Path:  Jenkinsfile
+
+       Here, we configure Jenkins to pull code from GitHub and use a Jenkinsfile to define
+         the pipeline.
