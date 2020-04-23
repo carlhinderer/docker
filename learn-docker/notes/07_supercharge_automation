@@ -630,3 +630,50 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
        Here, we configure Jenkins to pull code from GitHub and use a Jenkinsfile to define
          the pipeline.
+
+
+
+- Using Docker to Power a CI/CD Pipeline - Creating the Jenkinsfile
+
+    - We have defined that the Jenkinsfile must be in the project root folder.  This is the
+         foundation of 'Pipeline-as-Code', since we will also commit the Jenkinsfile to Github.
+
+         # File: Jenkinsfile
+
+         pipeline {
+            environment {
+                registry = "gnschenker/jenkins-docker-test"
+                DOCKER_PWD = credentials('docker-login-pwd')
+            }
+            agent {
+                docker {
+                    image 'gnschenker/node-docker'
+                    args '-p 3000:3000'
+                    args '-w /app'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            options {
+                skipStagesAfterUnstable()
+            }
+            stages {
+                stage("Build"){
+                    steps {
+                        sh 'npm install'
+                    }
+                }
+                stage("Test"){
+                    steps {
+                        sh 'npm test'
+                    }
+                }
+                stage("Build & Push Docker image") {
+                    steps {
+                        sh 'docker image build -t $registry:$BUILD_NUMBER .'
+                        sh 'docker login -u gnschenker -p $DOCKER_PWD'
+                        sh 'docker image push $registry:$BUILD_NUMBER'
+                        sh "docker image rm $registry:$BUILD_NUMBER"
+                    }
+                }
+            }
+        }
