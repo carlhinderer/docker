@@ -184,7 +184,92 @@ CHAPTER 8 - ADVANCED DOCKER USAGE SCENARIOS
 
 - Read-Only Filesystem
 
+    - For security purposes, it is often advised to denine the filesystem or part of it 
+        as read-only.  This makes the most sense for stateless services.
+
+        # Run as read-only
+        $ docker container run --tty -d \
+                               --name billing \
+                               --read-only \
+                               alpine /bin/sh
+
+
+        # Test it
+        $ docker container exec -it billing \
+                        sh -c 'echo "You are doomed!" > ./sample.txt'
+
+        sh: can't create ./sample.txt: Read-only file system
+
+
+
 - Avoid Running a Containerized Application as Root
+
+    - Most applications do not need root access.  For instance, let's say we have some 
+        secret content that only root users should be able to access.
+
+      First, let's secure the file with 'chmod'.
+
+        # Switch to root
+        $ su -
+
+        # Create secret file
+        $ echo "You should not see this." >> top-secret.txt
+        $ chmod 600 ./top-secret.txt
+
+        # Switch back to regular user
+        $ exit
+
+        # Now, I cannot read the file
+        $ cat ./top-secret.txt
+
+
+    - Now, let's try to read the file from a container.
+
+        # Create a Dockerfile
+        FROM ubuntu:latest
+        COPY ./top-secret.txt /secrets/
+        CMD cat /secrets/top-secret.txt
+
+        # Switch to root
+        $ su -
+
+        # Build the container (as root)
+        $ docker image build -t demo-image .
+
+        # Switch back to regular user
+        $ exit
+
+        # Now run the container (not as root)
+        $ docker container run demo-image
+        You should not see this.
+
+
+    - Even though we are running the container from a regular account, the application running 
+        inside the container automatically runs as root, so it has full access to protected
+        resources.
+
+      To fix this, we'll define an explicit user inside the container.
+
+        FROM ubuntu:latest
+        RUN groupadd -g 3000 demo-group |
+            && useradd -r -u 4000 -g demo-group demo-user
+        USER demo-user
+        COPY ./top-secret.txt /secrets/
+        CMD cat /secrets/top-secret.txt
+
+
+      When we build the new image as root, then switch back to our regular user and run the 
+        container, we will be blocked.
+
+        # Build image
+        $ su -
+        $ docker image build -t demo-image .
+        $ exit
+
+        # Try to read file
+        $ docker container run demo-image
+        cat: /secrets/top-secret.txt: Permission denied
+
 
 
 - Running Your Terminal in a Remote Container and Accessing it via HTTPS
