@@ -110,11 +110,77 @@ CHAPTER 8 - ADVANCED DOCKER USAGE SCENARIOS
 
 - Formatting the Output of Common Docker Commands
 
+    - Many Docker commands output a lot of information, which can make it hard to find
+        the specific thing you're looking for.
+
+      
+    - Luckily, most commands accept a --format argument, which accepts a Go template.
+        (This is because most of Docker is written in Go).  
+
+        # Display only container name, image, and status
+        $ docker container ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+
+
 - Filtering the Output of Common Docker Commands
 
-- Optimizing Your Build Process
+    - We can also filter the output of Docker commands.  The format of these is 
+        '--filter key=<value>'.
+
+        # Only return images with 'latest' tag that aren't dangling
+        $ docker image ls --filter dangling=false --filter "reference=*/*/*:latest"
+
+
+
+- Optimizing Your Build Processs
+
+    - One mistake that many people make at first is running 'npm install' or some other
+        expensive operation each time a subsequent layer (code files) is changed.
+
+        FROM node:12.10-alpine
+        WORKDIR /usr/src/app
+        COPY . .
+        RUN npm install
+        CMD npm start
+
+
+    - Instead, we want to run commands like 'npm install' above the layer that changes
+        frequently.  First, we copy over only the 'package.json' file, which is all we need to
+        run 'npm install', then run it, then copy over the rest of the project files.
+
+        FROM node:12.10-alpine
+        WORKDIR /usr/src/app
+        COPY package.json ./
+        RUN npm install
+        COPY . .
+        CMD npm start
+
+
 
 - Limiting Resources Consumed by a Container
+
+    - One of the great features of containers is the ability to limit the resources a
+        single container can consume.  This includes CPU and memory consumption.
+
+        # Limit the memory a container can use
+        $ docker container run --rm -it \
+                               --name stress-test \
+                               --memory 512M \
+                               ubuntu:19.04 /bin/bash
+
+
+    - To test this, we can use the 'stress' tool, which we use to simulate memory pressure.
+
+        # Install stress package
+        $ apt-get update && apt-get install -y stress
+
+        # View memory usage
+        $ docker stats
+
+        # Now, in another terminal, use memory
+        $ stress -m 4
+
+
 
 - Read-Only Filesystem
 
