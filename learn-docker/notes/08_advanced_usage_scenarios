@@ -2,16 +2,69 @@
 CHAPTER 8 - ADVANCED DOCKER USAGE SCENARIOS
 -----------------------------------------------------------
 
-- All the Tips and Tricks of a Docker Pro
+- Keeping Your Docker Environment Clean
 
-    - Keeping Your Docker Environment Clean
-    - Running Docker in Docker
-    - Formatting the Output of Common Docker Commands
-    - Filtering the Output of Common Docker Commands
-    - Optimizing Your Build Process
-    - Limiting Resources Consumed by a Container
-    - Read-Only Filesystem
-    - Avoid Running a Containerized Application as Root
+    - First, we want to periodically delete any dangling images.  These are layers that
+        have no relationship to any tagged images.  
+
+        # Remove dangling images
+        $ docker image prune -f
+
+
+    - Stopped containers can waste precious resources also.  If we don't need them any more,
+        we should remove them.
+
+        # Remove all containers
+        $ docker container prune --force
+
+
+    - Unused Docker volumes can too quickly fill up disk space.  It's a good idea to clean
+        them up also, especially in a development or CI environment where a lot of
+        temporary volumes are created.
+
+        # Remove all volumes not currently being used by any running containers
+        $ docker volume prune
+
+
+
+- Running Docker in Docker
+
+    - At times, we may want to run a container hosting an application that automates
+        certain Docker tasks.  
+
+      The Docker engine and Docker CLI are installed on the host, but the application
+        runs inside the container.  To allow applications inside the container to run 
+        docker commands, we bind-mount Linux sockets from the host into the container.
+
+
+    1. Create a 'builder' folder and navigate to it.
+
+         $ mkdir builder && cd builder
+
+
+    2. In this folder, create a Dockerfile.
+
+         # File: Dockerfile
+
+         FROM alpine:latest
+         RUN apk update && apk add docker
+         WORKDIR /usr/src/app
+         COPY . .
+         CMD ./pipeline.sh
+
+
+
+- Formatting the Output of Common Docker Commands
+
+- Filtering the Output of Common Docker Commands
+
+- Optimizing Your Build Process
+
+- Limiting Resources Consumed by a Container
+
+- Read-Only Filesystem
+
+- Avoid Running a Containerized Application as Root
 
 
 - Running Your Terminal in a Remote Container and Accessing it via HTTPS

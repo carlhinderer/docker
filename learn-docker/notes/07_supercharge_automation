@@ -829,3 +829,5 @@ CHAPTER 7 - USING DOCKER TO SUPERCHARGE AUTOMATION
 
         $ git add --all && git commit -m "Defined code based pipeline"
         $ git push origin master
+
+      If we click 'Build now' on the Jenkins main page, all of our steps should now run.
