@@ -53,6 +53,60 @@ CHAPTER 8 - ADVANCED DOCKER USAGE SCENARIOS
          CMD ./pipeline.sh
 
 
+    3. Now, create a 'pipeline.sh' file that automates the building, testing, and pushing
+         of a Docker image.
+
+         # File: pipeline.sh
+
+         #! /bin/bash
+         # *** Sample script to build, test and push containerized Node.js applications ***
+
+         # build the Docker image
+         docker image build -t $HUB_USER/$REPOSITORY:$TAG .
+
+         # Run all unit tests
+         docker container run $HUB_USER/$REPOSITORY:$TAG npm test
+
+         # Login to Docker Hub
+         docker login -u $HUB_USER -p $HUB_PWD
+
+         # Push the image to Docker Hub
+         docker image push $HUB_USER/$REPOSITORY:$TAG
+
+
+    4. Make the script executable.
+
+         $ chmod +x ./pipeline.sh
+
+
+    5. Build the image.
+
+         $ docker image build -t builder .
+
+
+    6. Now, we want to try out our builder with a sample app, which we have located in the
+         fod/ch08/sample-app folder.
+
+         $ cd ~/fod/ch08/sample-app
+         $ docker container run --rm \
+             --name builder \
+             -v /var/run/docker.sock:/var/run/docker.sock \
+             -v "$PWD":/usr/src/app \
+             -e HUB_USER=<user> \
+             -e HUB_PWD=<password>@j \
+             -e REPOSITORY=ch08-sample-app \
+             -e TAG=1.0 \
+             builder
+
+
+       Note that we mount the Docker socket into the container with:
+
+           -v /var/run/docker.sock:/var/run/docker.sock
+
+       If everything goes well, there should be a container app built for the sample-app,
+         the tests should have been run, and the image should have been pushed to Docker Hub.
+
+
 
 - Formatting the Output of Common Docker Commands
 
