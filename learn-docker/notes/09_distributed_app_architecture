@@ -28,9 +28,12 @@ CHAPTER 9 - DISTRIBUTED APPLICATION ARCHITECTURE
     - Logging
     - Tracing
     - Monitoring
-    - Application Updates
-        - Rolling Updates
-        - Blue-green Deployments
-        - Canary Releases
-        - Irreversible Data Changes
-        - Rollback
+
+
+- Application Updates
+
+    - Rolling Updates
+    - Blue-green Deployments
+    - Canary Releases
+    - Irreversible Data Changes
+    - Rollback

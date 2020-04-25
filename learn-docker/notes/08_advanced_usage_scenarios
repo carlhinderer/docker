@@ -269,13 +269,3 @@ CHAPTER 8 - ADVANCED DOCKER USAGE SCENARIOS
         # Try to read file
         $ docker container run demo-image
         cat: /secrets/top-secret.txt: Permission denied
-
-
-
-- Running Your Terminal in a Remote Container and Accessing it via HTTPS
-
-
-- Running Your Development Environment Inside a Container
-
-
-- Running Your Code Editor in a Remote Container and Accessing it via HTTPS
