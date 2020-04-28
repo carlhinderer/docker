@@ -203,7 +203,46 @@ CHAPTER 9 - DISTRIBUTED APPLICATION ARCHITECTURE
 - Application Updates
 
     - Rolling Updates
+
+        - We first create one instance of the new updates, direct traffic to it, make sure it is 
+            running correctly.  Then, we can start slowly replacing other instances.
+
+
     - Blue-green Deployments
+
+        - In blue-green deployments, the current version of the application service, 'blue', handles
+            all the application traffic.
+
+        - We install the new version of the service, 'green', on the production system.  The new
+            service is not wired with the rest of the application service yet.  
+
+        - We smoke test the green service, and if tests pass, we'll start routing traffic to it and
+            monitor it closely.
+
+
     - Canary Releases
+
+        - We start the new version of the application, a small amount (~1%) of traffic is routed to
+            it, then 5%, then more and more until fully deployed.
+
+
     - Irreversible Data Changes
+
+        - If part of our process executes some universal change in our state, like a schema change in
+            a relational dataabase, we need to use special care.  
+
+        - We need 3 steps:
+
+            1. Roll out a backward-compatible schema and data change.
+            2. If successful, deploy the new code.
+            3. If successful, clean up schema and remove backwards compatibility.
+
+
     - Rollback
+
+        - Sooner or later, we will have a problem with one of our updates.  In this case, we need
+            to roll back to recover from disaster.  So, we need to make sure we always have a 
+            plan for how to roll back to the previous version.
+
+        - With blue-green deployments, the rollback process should be fairly simple.  We can just
+            switch the router back to the blue version.
