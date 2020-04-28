@@ -102,19 +102,102 @@ CHAPTER 9 - DISTRIBUTED APPLICATION ARCHITECTURE
 
 
     - Defensive Programming
-        - Retries
-        - Logging
-        - Error Handling       
+
+        - When developing a service for a distributed application, it is always important to
+            remember that it is not standalone and depends on other services.  We need to deal
+            with potential failures explicitly.
+
+        - When a call to another service fails or times out, the calling code should be
+            structured in such a way that the same call is repeated after a short wait time.  If
+            the call fails again, we should wait a bit longer before trying again.  After a 
+            certain amount of time, we should give up and provide a degraded service.
+
+        - Important operations should always be logged in the proper category (debug, info, etc.).
+            The logging information should be collected by a central log aggregation service and
+            not be stored on an individual node of the cluster.
+
+        - We should try to fail fast.  If unrecoverable errors are detected, we should have the
+            service fail immediately and log meaningful information.  For instance, we should always
+            validate input first before doing other things.   
+
+
     - Redundancy
+
+        - A mission-critical system needs to be available at all times.  We should plan for
+            when, not if, failures of individual nodes will occur.
+
+        - To avoid downtime, each component of the system needs to be redundant.  This includes
+            the application components and all infrastructure parts (like edge routers and load
+            balancers).
+
+
     - Health Checks
+
+        - To keep track of when components become unavailable, we poll each instance of the
+            service to periodically check their health.
+
+        - If the health check to a particular instance times out, we kill the corresponding
+            instance and spin up a new instance in its place.  If all of this happens in a
+            fully automated way, the system is auto-healing.
+
+        - We could either have the proxy in charge of polling each instance, or we could make
+            the instances responsible for sending periodic signals to the proxy.
+
+
     - Circuit Breaker Pattern
+
+        - A circuit breaker is a mechanism used to avoid a distributed application going down
+            due to the cascading failure of many essential components.  
+
+        - We can achieve this by putting a circuit breaker in front of a service, which monitors
+            for failures.  If the number of failures reaches a certain threshold, the circuit
+            breaker will trip, and all subsequent calls will return with an error.
+
 
 
 - Running in Production
 
     - Logging
+
+        - Once a system is in production, we will not be able to live debug it.  Logs will be the
+            only way to track down problems.  So, it is crucial that logging produces abundant
+            and meaningful information.
+
+        - In a distributed environment, the execution path of a single request can get very
+            complex.  In order to trace things successfully, we need to include the time of the
+            message, component, and node in every log message.
+
+        - Logging information should be aggregated in a central location.
+
+
     - Tracing
+
+        - Tracing is used to find out how an individual request is funneled through a distributed
+            application and how much time is spend overall for the request and in each individual
+            component.
+
+        - This information can be used as one of the sources for dashboards that shows the behavior
+            and health of the system.
+
+
     - Monitoring
+
+        - Operations engineers like to have dashboards showing live key metrics of the system. 
+
+        - These metrics can be non-functional, including:
+
+            - Memory and CPU usage
+            - Number of crashes or exceptions
+            - Health of nodes
+
+        - Functional (application-specific) metrics could be things like:
+
+            - Number of orders completed
+            - Items out of stock in an inventory service
+
+        - Most often, the data used to aggregate numbers for a dashboard come from logs.  These could
+            be system logs (non-functional) or application-level logs (functional).
+
 
 
 - Application Updates
