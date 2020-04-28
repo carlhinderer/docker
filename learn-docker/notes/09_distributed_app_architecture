@@ -6,14 +6,101 @@ CHAPTER 9 - DISTRIBUTED APPLICATION ARCHITECTURE
 
     - Defining the Terminology
 
+        VM
+          Virtual Machine
+
+        Node
+          Individual server used to run applications (can be physical or VM)
+
+        Cluster
+          Group of nodes connected by a network that are used to run distributed applications
+
+        Network
+          Physical and software-defined communication paths between individual nodes of a 
+            cluster and programs running on those nodes
+
+        Port
+          Channel on which an application such as a web server listens for incoming requests
+
+        Service
+          Piece of software that implements a set of functionality used by other parts of the
+            application (this is a very overloaded term)
+
+
+    - Traditional monolithic applications have been written in such a way so that the result
+        is one tightly-coupled program that runs on a named server somewhere in the data center.
+
+      All of it's code is a single binary or a few tightly-coupled binaries.  
+
+          Incoming Request  
+                 |
+                 v
+          Server: blue-box-12a
+          IP: 172.52.13.44                  
+          Application: pet-shop
+                 |
+                 v
+              Database
+
+
 
 - Patterns and Best Practices
 
     - Loosely Coupled Components
+
+        - It's much easier to develop a complex application if we divide it into smaller
+            components.
+
+        - Components should have well-defined public interfaces through which other components
+            and the outside world can communicate with them.
+
+        - For testing purposes, we will replace other components with stubs or mocks.
+
+
     - Stateful vs Stateless
+
+        - A 'stateful' component is one that creates or modifies persistent data.  Typical
+            examples are database services or services that create files.
+
+        - 'Stateless' components do not create or modify persistent data.
+
+        - Stateless components are much easier to handle.  They can be easily scaled up and down.
+            They can be painlessly torn down and restarted in a different cluster.  For this
+            reason, it is helpful to design a system in a way in which most components are
+            stateless.
+
+
     - Service Discovery
+
+        - Components that need to communicate with each other need to know the server and
+            port where other services are located.  Traditionally this information would be 
+            stored in a config file.
+
+        - This approach will completely break down in a distributed environment.  We need an
+            external authority to keep track of where things are.  Usually, DNS serves this
+            purpose.
+
+
     - Routing
+
+        - Routing is the mechanism for sending packets from a source component to a target
+            component.
+
+        - The OSI model layers 2, 3, 4, and 7 are relevant in the context of containers and
+            container orchestration.
+
+
     - Load Balancing
+
+        - Load balancing is used whenever a service is running on more than one instance.
+
+        - We want to make sure each instance gets the same workload assigned to it.  There are 
+            different algorithms for this, but round-robin is the most common.  
+
+        - A load balancer also facilitates high availability if the load balancer periodically
+            checks the health of each instance.
+
+
     - Defensive Programming
         - Retries
         - Logging
