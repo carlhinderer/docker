@@ -225,6 +225,79 @@ CHAPTER 10 - SINGLE-HOST NETWORKING
 
 
 
+- Attaching Containers to Networks
+
+    - First, we run a container without specifying a network.
+
+        # Create standard container
+        $ docker container run --name c1 -it --rm alpine:latest /bin/sh
+
+        # Inspect the new container
+        $ docker container inspect c1
+
+        {
+            "Gateway": "127.17.0.1",
+            "IPAddress": "127.17.0.4",
+            "MacAddress": "02:42:ac:11:00:04",
+            "Networks": ["bridge": {...}]
+        }
+
+        # View container's network information from inside c1 container
+        $ ip addr
+        $ ip addr show eth0
+
+        # Get information about how requests are routed
+        $ ip route
+
+
+    - Now, run a second container on the same network.
+
+        # Create container c2
+        $ docker container run --name c2 -d alpine:latest ping 127.0.0.1
+
+        # Get the IP address
+        $ docker container inspect --format "{{.NetworkSettings.IPAddress}}" c2
+        172.17.0.3
+
+        # View containers
+        $ docker network inspect bridge
+
+
+    - Create 2 additional containers, this time on a new network.
+
+        # Create containers c3 and c4
+        $ docker container run --name c3 -d --network test-net \
+                               alpine:latest ping 127.0.0.1
+
+        $ docker container run --name c4 -d --network test-net \
+                               alpine:latest ping 127.0.0.1
+
+        # Inspect the new network
+        $ docker network inspect test-net
+
+
+    - Now, we want to see if c3 and c4 can communicate with each other.  
+
+        # Exec into c3
+        $ docker container exec -it c3 /bin/sh
+
+        # We can ping c4 successfully
+        $ ping c4
+
+        # We can also use the ip address
+        $ ping 127.17.0.3
+
+
+    - A container can be attached to multiple networks.
+
+        # Create container c5
+        $ docker container run --name c5 -d \
+                               --network sample-net \
+                               --network test-net \
+                               alpine:latest ping 127.0.0.1
+
+
+
 - The host and null Network
 
     - The host Network
