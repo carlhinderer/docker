@@ -4,8 +4,75 @@ CHAPTER 10 - SINGLE-HOST NETWORKING
 
 - The Container Network Model
 
+    - In the real world, a containerized business application needs several containers to
+        collaborate to achieve a goal.  Docker has a very simple networking model called the
+        'CNM' (Container Network Model).
+
+    - There are 3 elements:
+
+        1. Sandbox
+             The sandbox perfectly isolates the container, with no inbound connections allowed.
+
+        2. Endpoint
+             An endpoint is a controlled gateway into the network's sandbox.  The endpoint 
+               connects the network sandbox to the network.
+
+        3. Network
+             The network is the pathway that transports the data packets of an instance of 
+               communication from endpoint to endpoint (container to container).
+
+
+
+- CNM Implementations
+
+    Network                   Company      Scope      Description
+    --------------------------------------------------------------------------------------------
+    Bridge                    Docker       Local      Simple network based on Linux bridges to allow 
+                                                        networking on a single host
+
+    Macvlan                   Docker       Local      Configures multiple layer 2 (that is, MAC) 
+                                                        addresses on a single physical host interface
+
+    Overlay                   Docker       Global     Multinode-capable container network based on 
+                                                        Virtual Extensible LAN (VXLan)
+
+    Weave Net                 Weaveworks   Global     Simple, resilient, multi-host Docker networking
+
+    Contiv Network Plugin     Cisco        Global     Open source container networking
+
+
+    - All network types not directly provided by Docker can be added to the Docker host as a plug-in.
+
+
 
 - Network Firewalling
+
+    - Docker was built with security in mind.  Software-defined networks are easy and cheap to
+        create, yet they perfectly firewall containers that are attached to the network from
+        other containers.
+
+
+    - For instance, if we have 2 sets of services that need to communicate with each other:
+
+        c1 <--> c2      c3 <--> c4
+            n1              n2
+
+      c1 and c2 can communicate with each other, but not with c3 or c4.
+
+
+    - In this case, our productCatalog needs to communicate with both the api and DB.
+
+        webAPI  <-->  productCatalog  <-->  DB
+                 n1                    n2
+
+      The productCatalog can communicate with both the webAPI and DB, but they cannot communicate
+        with each other.
+
+
+    - Since creating SDNs is cheap, and each network provides security by isolating resources 
+        from unauthorized access, it is highly recommended that we create a separate network for
+        each type of communication that needs to occur.
+
 
 
 - Working with the Bridge Network
