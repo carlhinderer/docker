@@ -159,10 +159,69 @@ CHAPTER 10 - SINGLE-HOST NETWORKING
 
 - Understanding the Bridge Network
 
+    - Network Diagram
 
-- Defining a Custom Bridge Network
+        -----------------------------------------------------     --------------------------------
+        |  Host Newtork Namespace                           |     |  Container Network Namespace |
+        |                                                   |     |                              |
+        |                                                   |     |                              |
+        | eth0                  Routing          docker0--------------container                  |
+        | 10.10.20.216   <-->   Table     <-->   172.17.0.1 |     |   172.17.0.2                 |
+        |                                                   |     |                              |
+        -----------------------------------------------------     --------------------------------
+           Host eth0            Routing          Linux        veth
+                                Table            Bridge       Connection
 
-    - 
+
+    - The 'eth0' is a host's NIC.  All traffic to the host comes through eth0.
+
+    
+    - The 'Linux bridge' is responsible for routing the network traffic between the host's network
+        and the subnet of the bridge network.
+
+
+    - By default, only egress traffic is allowed, and all ingress is blocked.  So, while container
+        applications can reach the internet, they cannot be reached by outside traffic.  Each
+        container gets its own virtual ethernet ('vnet') connection with the bridge.
+
+
+                           eth0
+                           10.13.34.23
+                               ^
+                               |
+                               v
+                           docker0
+                           172.17.0.1
+                           /         \
+                          /           \
+                       veth0         veth1
+                       172.17.0.2    172.17.0.2
+
+
+
+- Creating a Custom Bridge Network
+
+    - We can define our own custom bridge networks.  Since it is a best practice not to run
+        all containers on the same network, we should use additional bridge networks to
+        further isolate containers that have no reason to communicate with each other.
+
+
+    - To create a custom bridge network:
+
+        # Create custom bridge network called 'sample-net'
+        $ docker network create --driver bridge sample-net
+
+
+        # Get the subnet of the new custom network
+        $ docker network inspect sample-net | grep Subnet
+
+        "Subnet": "172.18.0.0/16",
+
+
+    - Use a custom subnet range:
+
+        # Specify a custom subnet range
+        $ docker network create --driver bridge --subnet "10.1.0.0/16" test-net
 
 
 
