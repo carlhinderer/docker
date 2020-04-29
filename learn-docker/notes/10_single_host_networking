@@ -389,9 +389,41 @@ CHAPTER 10 - SINGLE-HOST NETWORKING
 
 - Managing Container Ports
 
+    - We still need to be able to expose applications to the outside world.  For instance,
+        we may have a container running a web server hosting our webAPI from before.
+
+      We want customers to be able to access the service, so we need to open up a port in the
+        container that maps to a port on the host.
+
+
+    - We map a container port to a host port when creating a container.  Here, we start an nginx
+        server, which is listening on port 80.  With the -P parameter, we can map all exposed
+        container ports to a free port in the 32xxx range.
+
+        # Let Docker pick a port
+        $ docker container run --name web -P -d nginx:alpine
+
+
+        # Check which port is being used
+        $ docker container port web
+        80/tcp -> 0.0.0.0:32768
+
+        # Can also get the port this way
+        $ docker container inspect web | grep HostPort
+        32768
+
+        # Or this way
+        $ docker container ls
+
+
+    - To map a container port to a specific host port, we can use the -p argument.
+
+        # Map host 8080 to container 80
+        $ docker container run --name web2 -p 8080:80 -d nginx:alpine
+
+
 
 - HTTP-Level Routing Using a Reverse Proxy
 
-    - Containerizing the Monolith
     - Extracting the First Microservice
     - Using Traefik to Route Traffic
