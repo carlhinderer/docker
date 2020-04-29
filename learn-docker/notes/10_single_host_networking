@@ -298,13 +298,93 @@ CHAPTER 10 - SINGLE-HOST NETWORKING
 
 
 
+- Removing a Network
+
+    - We can remove a network if there are no containers attached to it.
+
+        # Remove a network
+        $ docker network rm test-net
+        Error response from daemon: network test-net id 863192... has active endpoints
+
+        # Remove all the containers
+        $ docker container rm -f $(docker container ls -aq)
+
+        # Remove the two custom networks that we created
+        $ docker network rm sample-net
+        $ docker network rm test-net
+
+
+    - Alternatively, we could remove all the networks that no container is attached to with 
+        the prune command:
+
+        # Remove networks without containers
+        $ docker network prune --force
+
+
+
 - The host and null Network
 
     - The host Network
+
+        - Normally, for security reasons, we should never attach containers to the host's 
+            network.  We might want to do this for very specific reasons, like if we need to 
+            analyze network traffic on the host's network.
+
+
+        - If we do need to do this:
+
+            # Attach container to host's network
+            $ docker container run --rm -it --network host alpine:latest /bin/sh
+
+            # Get host network information from inside the container
+            $ ip addr show eth0
+            $ ip route
+
+
+
     - The null Network
+
+        - Sometimes, we have tasks that don't need any network at all to execute their task.
+            If we run them using the 'none' network, they will be isolated from outside access.
+
+            # Run without network
+            $ docker container run --rm -it --network none alpine:latest /bin/sh
+
+            # Returns nothing from inside the container
+            $ ip addr show eth0
+            $ ip route
+
 
 
 - Running in an Existing Network Namespace
+
+    - Normally, Docker creates a new network namespace for each container we run.  
+
+      A 'network namespace' corresponds to the sandbox of the CNM.  We can run multiple
+        containers in the same network namespace in specific conditions.
+
+
+    - For instance, this may be useful to debug a running container without running additional
+        processes inside the container.
+
+        # Create a new bridge network
+        $ docker network create --driver bridge test-net
+
+        # Run a container attached to the network
+        $ docker container run --name web -d \
+                               --network test-net nginx:alpine
+
+        # Run another container and attach it to our 'web' container
+        $ docker container run -it --rm --network container:web \
+                               alpine:latest /bin/sh
+
+        # Now, since we're in the same network namespace, we can access nginx on localhost
+        $ wget -q0 - localhost
+
+        # Clean up container and network
+        $ docker container rm --force web
+        $ docker network rm test-net
+
 
 
 - Managing Container Ports
