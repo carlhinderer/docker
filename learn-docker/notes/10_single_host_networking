@@ -511,3 +511,73 @@ CHAPTER 10 - SINGLE-HOST NETWORKING
 
 
     - Using Traefik to Route Traffic
+
+        - Notice that with the original monolith, we accessed it at:
+
+            localhost:5000/catalog?category=bicycles
+
+          While we accessed the containerized version at:
+
+            http://acme.com:3000/catalog?type=bicycle
+
+          We want existing clients to be able to keep using port 5000 so that they don't have
+            to be changed.  We will use Traefik, a cloud-native edge router, to manage that
+            for us.
+
+
+        - Traefik is open-source, has a nice web UI for managing and monitoring routes, and can
+            be easily combined with Docker.
+
+
+        - First, we'll run the catalog service.
+
+            $ docker container run --rm -d \
+               --name catalog \
+               --label traefik.enable=true \
+               --label traefik.port=3000 \
+               --label traefik.priority=10 \
+            --label traefik.http.routers.catalog.rule="Host(\"acme.com\") && PathPrefix(\"/catalog\")" \
+               acme/catalog:1.0
+
+
+               traefik.enable    # Whether this container should be included in the routing
+               treafik.port      # Router should forward calls to port 3000
+               treafik.priority  # Give the route high priority
+               treafik.http.routers.catalog.rule      # Request must begin with 'acme.com/catalog' to
+                                                          be routed by this service
+
+
+        - Now, we can run the 'eshop' container.  We'll forward traffic to port 5000, and we'll set
+            priority to low.  This way, URLs starting with 'catalog' will be filtered to new service,
+            while other urls will go to the eshop service.
+
+            $ docker container run --rm -d \
+                                   --name eshop \
+                                   --label traefik.enable=true \
+                                   --label traefik.port=5000 \
+                                   --label traefik.priority=1 \
+                                   --label traefik.http.routers.eshop.rule="Host(\"acme.com\")" \
+                                   acme/eshop:1.0
+
+
+        - Finally, we'll run Traefik as the edge router that will serve as a reverse proxy in front
+            of our application.  We mount the Docker socket into the container so that Traefik can
+            interact with the Docker engine.  The web UI for Traefik is at port 8080.
+
+            $ docker run -d \
+                         --name traefik \
+                         -p 8080:8080 \
+                         -p 80:80 \
+                         -v /var/run/docker.sock:/var/run/docker.sock \
+                         traefik:v2.0 --api.insecure=true --providers.docker
+
+
+        - Now, we can test the URLs to make sure they go to the correct destination.
+
+            $ curl http://acme.com/catalog?type=bicycles
+            $ curl http://acme.com/checkout
+
+
+        - To clean up, we should stop all containers.
+
+            $ docker container rm -f traefik eshop catalog
