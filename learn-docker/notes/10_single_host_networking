@@ -425,5 +425,89 @@ CHAPTER 10 - SINGLE-HOST NETWORKING
 
 - HTTP-Level Routing Using a Reverse Proxy
 
+    - We need to containerize a monolithic application that has evolved over the years into
+        an unmaintainable monster.  
+
+
+    - Containerizing the Monolith
+
+        1. First, we'll run the existing application, which uses Flask and is implemented in 
+             Python 2.7.
+
+             # Run the application
+             $ cd monolith
+             $ pip install -r requirements.txt
+             $ export FLASK_APP=main.py
+             $ flask run
+
+
+        2. Now, we can use curl to test the app.
+
+             # Test existing application
+             $ curl localhost:5000/catalog?category=bicycles
+
+
+        3. Next, we'll create an entry in the /etc/hosts file that maps 'acme.com' to locahost.
+
+             # Add to /etc/hosts
+             127.0.0.1 acme.com
+
+             # Ping name to make sure it works
+             $ ping acme.com
+
+
+        4. Now, we can start containerizing the application.  We need to make sure we have the
+             application web server listening on 0.0.0.0 instead of localhost.
+
+             # File: main.py
+             if __name__ == '__main__':
+                 app.run(host='0.0.0.0' port=5000)
+
+
+        5. Now, we add a Dockerfile to the 'monolith' folder.
+
+             # File: Dockerfile
+
+             FROM python:3.7-alpine
+             WORKDIR /app
+             COPY requirements.txt ./
+             RUN pip install -r requirements.txt
+             COPY . .
+             EXPOSE 5000
+             CMD python main.py
+
+
+        6. Build the image for the application.
+
+             # Build image
+             $ docker image build -t acme/eshop:1.0 .
+
+
+        7. Now, we can run the application.
+
+             # Run the containerized application
+             $ docker container run --rm -it --name eshop \
+                                    -p 5000:5000 \
+                                    acme/eshop:1.0
+
+             # Test it, works the same as before
+             $ curl http://acme.com:5000/checkout
+
+
     - Extracting the First Microservice
+
+        - Now, we'll extract the catalog part of the application into it's own service.  
+            We'll implement it using Node.js.  
+
+            # Build the Docker image for the new microservice
+            $ docker image build -t acme/catalog:1.0 .
+
+            # Run the container
+            $ docker run --rm -it --name catalog -p 3000:3000 acme/catalog:1.0
+
+            # Test the new service
+            $ curl http://acme.com:3000/catalog?type=bicycle
+
+
+
     - Using Traefik to Route Traffic
