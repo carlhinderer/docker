@@ -640,7 +640,7 @@
     - Now, we can create the Dockerfile.  This will most likely require a lot of iterations and
         fine-tuning.  
 
-        1. We need to choose a base image.  If an image for our application type like Jave is
+        1. We need to choose a base image.  If an image for our application type like Java is
              available, we should use that.  Otherwise, we should use a Linux distro image.
 
         2. We need to assemble sources using the COPY and ADD commands.
