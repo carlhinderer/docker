@@ -1,6 +1,6 @@
------------------------------------------------------------
-CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
------------------------------------------------------------
+------------------------------------------------------------------
+| CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES               |
+------------------------------------------------------------------
 
 - What Are Images?
 
@@ -314,7 +314,7 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
     - The CMD and ENTRYPOINT keywords are special.  While all other keywords defined for a
         Dockerfile are executed at the time the image is built by the Docker builder, 
-        these keywords are actually deifinitions of what will happen when the container is
+        these keywords are actually definitions of what will happen when the container is
         started.
 
       When the container runtime starts a container, it needs to know what the process or
@@ -407,10 +407,7 @@ CHAPTER 4 - CREATING & MANAGING CONTAINER IMAGES
 
     - In the ~/FundamentalsOfDocker/sample1 directory, create a file called 'Dockerfile'.
 
-        # Create Dockerfile
-        $ vim Dockerfile
-
-        # File contents
+        # Dockerfile
         FROM centos:7
         RUN yum install -y wget
 
