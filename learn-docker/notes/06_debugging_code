@@ -253,18 +253,65 @@
           app.run()
 
 
-    - Add a requirements.txt and install packages.
+    - Add a requirements.txt and Dockerfile.
 
         # File: requirements.txt
+        -------------------------------
         flask
 
-        # Install packages
-        $ pip install -r requirements.txt
+        
+        # File: Dockerfile
+        -------------------------------
+        FROM python:3
+        WORKDIR /app
+        COPY requirements.txt ./
+        RUN pip install -r requirements.txt
+        COPY . .
+        ENV FLASK_APP=main.py
+        CMD flask run --host=0.0.0.0
+
+
+    - And we can build our image and run our container.
+
+        $ docker image build -t sample-py-app .
+
+
+      And re-run the container from the new image:
+
+        $ docker container run --rm -it \
+                               --name my-sample-py-app \
+                               -p 5000:5000 \
+                                sample-py-app
 
 
     - We can use nodemon to auto-reload Python applications also.
 
         $ nodemon main.py
+
+      
+    - However, in our case, we'll just use Flask's built-in auto-reloading.
+
+        # Dockerfile-dev
+        -------------------------------
+        FROM python:3
+        WORKDIR /app
+        COPY requirements.txt ./
+        RUN pip install -r requirements.txt
+        COPY . .
+        ENV FLASK_APP=main.py
+        ENV FLASK_ENV=development
+        CMD flask run --host=0.0.0.0
+
+
+    - Now, we'll build and run the new image.
+
+        $ docker image build -t sample-py-app-dev -f Dockerfile-dev .
+
+        $ docker container run --rm -it \
+                               --name my-sample-py-app-dev \
+                               -p 5000:5000 \
+                               -v $(pwd):/app sample-py-app \
+                               sample-py-app-dev
 
 
     - Now, we can make some changes.
