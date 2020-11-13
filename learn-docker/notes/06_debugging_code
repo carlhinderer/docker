@@ -24,8 +24,8 @@
            Notice that a 'package.json' file is created:
 
              # File: package.json
-
-             
+             ----------------------------
+             {
                "name": "ch06",
                "version": "1.0.0",
                "description": "",
