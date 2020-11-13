@@ -400,8 +400,9 @@
         logger.addHandler(ch)
 
 
-    - Now, we can add a logging message to the 'hello()' function.  Since we set the log level 
-        to WARN, our info messages will not be displayed in the console.
+    - Now, we can add a logging message to the 'hello()' function.  Since we set the log level
+        to WARN, only 'WARN', 'ERROR', and 'FATAL' messages will be output to the logging 
+        handlers (sinks).
 
         # Add INFO-level message
         @app.route("/")
