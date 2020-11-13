@@ -220,7 +220,7 @@
 
     - Now, we can build our development image:
 
-        $ docker image build -t sample-app-dev .
+        $ docker image build -t sample-app-dev -f Dockerfile-dev .
 
       And run the container:
 

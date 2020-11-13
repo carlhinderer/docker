@@ -16,3 +16,11 @@ const hobbies = [
 app.get('/hobbies', (req, res)=>{
     res.send(hobbies);
 })
+
+app.get('/status', (req, res)=>{
+    res.send('OK');
+})
+
+app.get('/colors', (req, res)=>{
+    res.send(['red', 'green', 'blue']);
+})
