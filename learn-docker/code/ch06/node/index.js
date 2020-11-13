@@ -8,3 +8,11 @@ app.listen(3000, '0.0.0.0', ()=>{
 app.get('/', (req, res)=>{
     res.send('Sample Applicaton: Hello World!');
 })
+
+const hobbies = [
+    'Swimming', 'Diving', 'Jogging', 'Cooking', 'Singing'
+];
+
+app.get('/hobbies', (req, res)=>{
+    res.send(hobbies);
+})
