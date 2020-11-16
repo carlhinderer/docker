@@ -426,13 +426,14 @@
 - HTTP-Level Routing Using a Reverse Proxy
 
     - We need to containerize a monolithic application that has evolved over the years into
-        an unmaintainable monster.  
+        an unmaintainable monster.  However, we don't want to break any part of the public
+        API.
 
 
     - Containerizing the Monolith
 
         1. First, we'll run the existing application, which uses Flask and is implemented in 
-             Python 2.7.
+             Python 3.7.
 
              # Run the application
              $ cd monolith
