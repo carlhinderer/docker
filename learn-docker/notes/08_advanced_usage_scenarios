@@ -184,7 +184,7 @@
 
 - Read-Only Filesystem
 
-    - For security purposes, it is often advised to denine the filesystem or part of it 
+    - For security purposes, it is often advised to define the filesystem or part of it 
         as read-only.  This makes the most sense for stateless services.
 
         # Run as read-only

@@ -162,7 +162,7 @@
     - Network Diagram
 
         -----------------------------------------------------     --------------------------------
-        |  Host Newtork Namespace                           |     |  Container Network Namespace |
+        |  Host Network Namespace                           |     |  Container Network Namespace |
         |                                                   |     |                              |
         |                                                   |     |                              |
         | eth0                  Routing          docker0--------------container                  |
@@ -379,7 +379,7 @@
                                alpine:latest /bin/sh
 
         # Now, since we're in the same network namespace, we can access nginx on localhost
-        $ wget -q0 - localhost
+        $ wget -qO - localhost
 
         # Clean up container and network
         $ docker container rm --force web
