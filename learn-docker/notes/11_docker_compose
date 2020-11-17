@@ -4,9 +4,22 @@
 
 - Declarative vs Imperative
 
-    Imperative = programmer must specify exact procedure to be followed
+    - Docker Compose is a tool used to run and orchestrate containers running on a single
+        host.  This is useful for:
 
-    Declarative = specify desired state, application figures out how to achieve it
+          - Development
+          - CI
+          - Automated testing
+          - Manual QA
+          - Demos
+
+    - Docker Compose uses YAML files for configuration.  These files provide a declarative
+        way for describing and running a containerized application.
+
+
+    - Imperative = programmer must specify exact procedure to be followed
+
+    - Declarative = specify desired state, application figures out how to achieve it
 
 
 
@@ -42,6 +55,8 @@
           stored and build the images.
 
           $ docker-compose build
+
+
     - Running an Application with Docker Compose
 
 
