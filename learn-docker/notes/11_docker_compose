@@ -104,8 +104,34 @@
 
 - Scaling a Service
 
+    - Now, let's say we want to have multiple instances of our 'web' container.  The 
+        only problem is that they will all try to use the same port.  To fix this, we
+        make a change to the 'docker-compose.yml' where we allow the host ports to
+        be chosen for us.
+
+        # docker-compose.yml
+        ------------
+        services:  
+          web:    
+            image: fundamentalsofdocker/ch11-web:2.0
+            build: web
+            ports:
+              - 3000
+
+
+    - And we can start our application with 3 instances of the 'web' container.
+
+        $ docker-compose up -d --scale web=3
+
+
+    - To verify all 3 are running:
+
+        $ docker-compose ps
+
+
 
 - Building and Pushing an Application
 
 
 - Using Docker Compose Overrides
+
