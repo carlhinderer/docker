@@ -57,7 +57,49 @@
           $ docker-compose build
 
 
-    - Running an Application with Docker Compose
+
+- Running an Application with Docker Compose
+
+    - Now, we can run the services.
+
+        $ docker-compose up
+
+
+    - In the output, we can see that Docker Compose:
+
+        1. Creates a bridge network
+        2. Creates a volume
+        3. Creates the 2 services and attaches them to the network.
+
+
+    - To stop the application, we can just press Cntl + C
+
+
+    - We can also run the application in the background with the '-d' option.  All
+        containers will run as daemons.
+
+        $ docker-compose up -d
+
+
+    - To stop and clean up the application:
+
+        # Stop and remove containers and network
+        $ docker-compose down
+
+        # Remove the volume
+        $ docker volume rm ch11_pets-data
+
+        # Remove container, network and volume in single command
+        $ docker-compose down -v
+
+
+    - By default, Docker Compose prefixes all names with the name of the parent folder
+        they are stored in (in this case 'ch11').  To use a different name, the '-p'
+        option is used.
+
+        # Set project name to 'my-app' instead
+        $ docker-compose -p my-app up
+
 
 
 - Scaling a Service
