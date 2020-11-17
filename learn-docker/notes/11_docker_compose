@@ -4,10 +4,44 @@
 
 - Declarative vs Imperative
 
+    Imperative = programmer must specify exact procedure to be followed
+
+    Declarative = specify desired state, application figures out how to achieve it
+
+
 
 - Running a Multi-Service App
 
+    - Here is an example of a Docker Compose file:
+
+        # docker-compose.yml
+        ------------------------------------
+        version: "2.4"
+        services: 
+          web:
+            image: fundamentalsofdocker/ch11-web:2.0
+            build: web
+            ports:
+            - 80:3000
+          db:
+            image: fundamentalsofdocker/ch11-db:2.0
+            build: db
+            volumes:
+            - pets-data:/var/lib/postgresql/data
+        volumes: 
+          pets-data:
+
+
+        - 'version' is the version of the Docker Compose format we're using
+        - 'ports' maps container port 3000 to host port 80
+
+
     - Building Images with Docker Compose
+
+        Now, we can navigate to the directory where the 'docker-compose.yml' file is
+          stored and build the images.
+
+          $ docker-compose build
     - Running an Application with Docker Compose
 
 
