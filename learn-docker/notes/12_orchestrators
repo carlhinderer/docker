@@ -125,12 +125,110 @@
     - Security
 
          - Secure Communication and Cryptographic Node Identity
+
+             - We want to make sure that the cluster is secure.  Only trusted nodes can 
+                 join the cluster.  
+
+             - Each node that joins the cluster gets a cryptographic node identity, and all
+                 communications between the nodes must be encrypted.  For this, nodes can
+                 use MTLS (Mutual Transport Layer Security).
+
+             - In order to authenticate nodes of the cluster with each other, certificates
+                 are used.  These certificates are automatically rotated periodically in
+                 case a certificate is leaked.
+
+             - The communication that happens in a cluster can be separated into 3 types.
+
+                 1. The Management Plane - This is used by cluster managers to schedule 
+                      instances, execute health checks, create and modify volumes, secrets,
+                      and networks.
+
+                 2. The Control Plane - This is used to exchange important state information
+                      between all nodes of the cluster.  For instance, this is used to 
+                      update the local IP tables of clusters.
+
+                 3. The Data Plane - Where actual application services communicate with each
+                      other and exchange data.
+
+             - Normally, orchestrators care mainly about securing the management and control 
+                 planes.  Securing the data plane is left to the user.
+
+
          - Secure Networks and Network Policies
+
+             - Not every service needs to communicate with every other service in the cluster.
+                 So, we should only run services in the same networking sandbox that absolutely
+                 need to communicate with each other.
+
+             - We can use a SDN (Software-Defined Network) to group application services.
+
+             - Or we can have one flat network and use network policies to control who does and
+                 doesn't have access to one particular service or group of services.
+
+
          - RBAC
+
+             - An orchestrator must provide RBAC to provide access to the cluster and its
+                 resources.  This ensures that unauthorized personnel cannot do harm to the 
+                 system.
+
+             - We can implement RBAC with grants, giving specific permissions to users.
+
+
          - Secrets
+
+             - Secrets include passwords and API keys or tokens.  In the past, these were
+                 hard-coded or stored in plain text in config files.  
+
+             - Orchestrators can encrypt these secrets and store them in the highly available 
+                 cluster state database.  So, they are secured at rest.
+
+             - Once a secret is requested by an authorized application service, the secret is
+                 sent only to the nodes on which that particular service is running.  The 
+                 secret value is never stored on the node, but is mounted into the container
+                 in a 'tmpfs' RAM-based volume.  The secret is only available in plain text
+                 inside the container.
+
+             - The secrets are sent to the nodes encrypted by MTLS.  So they are secure in 
+                 transit also.
+
+
          - Content Trust
+
+             - We want to make sure that only trusted images run in our production cluster.
+                 To do this, we sign images at the source (ie a CI server) and validate the
+                 signatures at the target.
+
+
          - Revese Uptime
+
+             - Let's say a hacker does gain root access to one of your cluster nodes.  This is
+                 bad enough, but now they could mask thir presence on the node and use it as
+                 a basis to attack other nodes in your cluster.
+
+             - To mitigate this, we can leverage the fact that containers are ephemeral and nodes
+                 are quickly provisioned.  We can just kill each cluster node after a certain
+                 uptime (ie 1 day).  Then, we can replace it with a freshly provisioned node.
+
+
     - Introspection
+
+        - The orchestrator should collect system metrics from all the cluster nodes and
+            make them accessible to the operators.  Metrics include CPU, memory, and disk
+            usage, network bandwidth consumption, and many more.
+
+        - This information should be available on a per-node basis, and also in an 
+            aggregate form.  It should be available in dashboards and via API calls.
+
+        - We also need to access logs provided by the containers.
+
+        - We also want to be able to 'exec' into each container if we have the correct
+            authorization to do so.
+
+        - In highly distributed applications, tracing a request end-to-end can be very
+            difficult.  Ideally, an orchestrator would provide some facility for tracing
+            requests.
+
 
 
 - Overview of Popular Orchestrators
