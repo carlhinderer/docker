@@ -132,6 +132,76 @@
 
 - Building and Pushing an Application
 
+    - We can also use the 'docker-compose build' command to build the images of the
+        applications defined in the docker-compose.yml file.  We'll set the 'build'
+        option of each component to the name of the folders the Dockerfiles are
+        expected to be found in.
+
+        # docker-compose.dev.yml
+        ---------------------------------
+        version: "2.4"
+        services:  
+          web:    
+            build: web    
+            image: fundamentalsofdocker/ch11-web:2.0    
+            ports:      
+              - 80:3000
+          db:    
+            build: db    
+            image: fundamentalsofdocker/ch1-db:2.0    
+            volumes:      
+              - pets-data:/var/lib/postgresql/data
+        volumes:  
+          pets-data:
+
+
+    - To build the application:
+
+        $ docker-compose -f docker-compose.dev.yml build
+
+
+    - Now, we can push the images to DockerHub.
+
+        $ docker login -u username -p password
+        $ docker-compose -f docker-compose.dev.yml push
+
+
 
 - Using Docker Compose Overrides
 
+    - We can use overrides if we have different environments that need specific
+        config settings.  First, we define a base Docker Compose file.
+
+        # docker-compose.base.yml
+        ---------------------------------
+        version: "2.4"
+        services:
+          web:
+            image: fundamentalsofdocker/ch11-web:2.0
+          db:
+            image: fundamentalsofdocker/ch11-db:2.0
+            volumes:      
+              - pets-data:/var/lib/postgresql/data
+        volumes:
+          pets-data:
+
+
+    - Now, we create an override file for our CI server.
+
+        # docker-compose-ci.yml
+        ---------------------------------
+        version: "2.4"
+        services:
+          web:
+            build: web
+            ports:      
+              - 5000:3000    
+            environment:     
+              POSTGRES_PASSWORD: ci-pass  
+          db:    
+            build: db
+            environment:      
+              POSTGRES_PASSWORD: ci-pass
+
+
+    - 
