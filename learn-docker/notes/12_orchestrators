@@ -234,7 +234,50 @@
 - Overview of Popular Orchestrators
 
     - Kubernetes
+
+        - Originally designed at Google, based on lessons learned from their Borg system,
+            donated to the CNCF in 2015.
+
+        - Has a significant learning curve for new users.
+
+        - Is the de facto standard for container orchestrators.
+
+
     - Docker Swarm
+
+        - Docker's solution for managing clusters of host machines.
+
+        - SwarmKit, first introduced in 2016, is now an integral part of the Docker engine
+            itself.
+
+        - Designed to be easy to set up and secure out of the box.
+
+
     - Apache Mesos and Marathon
+
+        - Mesos was an open source project, originally designed to make a cluster of
+            servers or nodes look like one big server from the outside.  It makes the
+            management of computer clusters simple.  It was first released in 2009.
+
+        - Users don't care about individual servers, they just assume they have a big
+            pool of resources at their disposal.
+
+        - Mesos is popular mainly in the big data space for services like Spark or Hadoop.
+
+        - Mesos is really the underlying infrastructure for other interesting services
+            built on top of it.  Marathon is a container orchestrator built on top of
+            Mesos.
+
+
     - Amazon ECS
+
+        - ECS is Amazon's AWS-specific orchestrator.  It is highly scalable, fast, and provides
+            access to other popular AWS services.  
+
+        - Amazon provides its own private image registry.
+
+
     - Microsoft ACS
+
+        - ACS is Microsoft's orchestrator designed to run on Azure.  In light of the
+            popularity of Kubernetes, it has been rebranded to 'Azure Kubernetes Service'.
