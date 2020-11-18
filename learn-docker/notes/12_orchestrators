@@ -2,21 +2,128 @@
 | CHAPTER 12 - ORCHESTRATORS                                     |
 ------------------------------------------------------------------
 
-- What are Orchestrators and Why Do We Need Them?
-
-
 - The Tasks of an Orchestrator
 
     - Reconciling the Desired State
+
+        - We declaratively specify how we want our application to run, and the 
+            orchestrator reconciles the application to our specification.
+
+        - For instance, the orchestrator would:
+            - Start the containers to achieve the desired state
+            - Monitor the application state over time
+            - Scale up the containers if one crashes
+            - Scale down the containers if too many are running
+            - Kill containers that are running an outdated version of the desired image
+
+
     - Replicated and Global Services
+
+        - A 'replicated' service is a service required to run a specific number of
+            instances (ie 10 instances).
+
+        - A 'global' service is a service required to have exactly one instance 
+            running on each worker node in a cluser.
+
+        - In a cluster, we typically have 2 types of nodes: 'managers' and 'workers'.
+            A manager node is used exclusively by the orchestrator to run the cluser
+            and does not have any other workload.  Worker nodes run the actual
+            applications.
+
+        - In Kubernetes, a global service is also called a 'DaemonSet'.
+
+
     - Service Discovery
+
+        - The orchestrator should have total control over which containers are run on
+            which nodes, and we shouldn't try to keep track of it.
+
+        - Service A should not have to worry about where to find Service B.  The 
+            orchestrator should tell Service A at runtime where to find it.  
+
+
     - Routing
+
+        - The orchestrator should take over the task of funneling data packets between
+            services.  
+
+        - Data packets might be sent between containers on the same cluster node, on
+            containers on different cluster nodes, or to/from outside the cluster
+            entirely.  All of these cases are handled by the orchestrator.
+
+
     - Load Balancing
+
+        - In a highly available distributed application, all components have to be
+            redundant.  If one instance fails, the service as a whole should still be
+            operational.
+
+        - Requests for services should be distributed equally to all the instances.  Simple
+            round robin is the most frequently used algorithm.
+
+        - We expect the orchestrator to handle load balancing for requests between services
+            and requests from external sources.
+
+
     - Scaling
+
+        - In real-life scenarios, the workload varies over time.  When scaling up or
+            down, we expect orchestrators to distributed the instances in a meaningful
+            way.
+
+        - For instance, new instances should not all be provisioned on the same server
+            rack, since failure of that rack could take down the entire service.
+
+        - In the cloud, we often use the term 'availability zone' instead of thinking
+            about server racks.
+
+
     - Self-Healing
+
+        - Orchestrators should be able to monitor the health of cluster nodes, and take
+            them out of the scheduler loop if they have crashed.  If it can do this, it
+            creates a 'self-healing' system.
+
+        - Note that often, only the application itself knows whether it is healthy or not.
+            So, it may need to define an API endpoint that returns whether it is healthy
+            or not that the orchestrator can call.
+
+
     - Zero Downtime Deployments
+
+        - Rolling updates can be used to avoid downtime during deployments.  We can
+            use the orchestrator to do these updates automatically, and to roll
+            back if the update is not successful.
+
+        - We deploy the new code, but it is only available internally, and then we can
+            run smoke tests to make sure the new version is working as expected.
+
+        - In a 'blue-green deployment', once we have verified that the new verison works,
+            we switch over from the old 'blue' version to the new 'green' version.
+
+        - In a 'canary release', we direct a small amount of traffic (maybe 1%) to the
+            new version and carefully monitor it.  Then, we slowly increase the percentage
+            of traffic going to the new version, continuing to monitor it.
+
+
     - Affinity and Location Awareness
+
+        - Sometimes, certain services require specific hardware on the nodes they are
+            attached to (ie SSDs or GPUs).  Orchestrators allow us to define these 
+            affinities for specific applications, and only nodes that support the 
+            affinities will have those applications provisioned to them.
+
+        - Note that to maintain high availability, we should have multiple nodes that
+            support the affinities.
+
+        - Some orchestrators support 'location awareness' or 'geo awareness', which allows
+            us to spread clusters across multiple geographic areas.  This ensures that
+            the application will remain available even if an entire geographic area goes
+            down.
+
+
     - Security
+
          - Secure Communication and Cryptographic Node Identity
          - Secure Networks and Network Policies
          - RBAC

@@ -204,4 +204,7 @@
               POSTGRES_PASSWORD: ci-pass
 
 
-    - 
+    - Now, we can run this application with the multiple files specified.  Each file
+        specified in the arguments overrides the previous ones.
+
+        $docker-compose -f docker-compose.yml -f docker-compose-ci.yml up -d --build
